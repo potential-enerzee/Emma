@@ -642,17 +642,28 @@
 
   // Celebration
   const finalActions = document.getElementById("final-actions");
+  const finalContent = document.querySelector(".final-content");
   const yesMessage = document.getElementById("yes-message");
   const confetti = document.getElementById("confetti");
+  const threadStage = document.getElementById("thread-stage");
+  const threadPull = document.getElementById("thread-pull");
+  const threadLine = document.getElementById("thread-line");
+  const threadP = document.getElementById("thread-p");
+  const threadE = document.getElementById("thread-e");
+  const threadInstruction = document.getElementById("thread-instruction");
+  const threadSuccess = document.getElementById("thread-success");
+  let threadProgress = 0;
+  let pullingThread = false;
+  let threadStartY = 0;
+  let threadPullDistance = 0;
+  let threadFrame = 0;
+  let threadLastFrame = 0;
+  let keyboardPull = false;
 
-  function celebrate() {
-    if (yesMessage.classList.contains("visible")) return;
-    finalActions.style.display = "none";
-    yesMessage.classList.add("visible");
-    navigator.vibrate?.([40, 60, 80]);
-
+  function throwConfetti(amount = 80) {
+    confetti.replaceChildren();
     const colors = ["#fffaf6", "#efd88f", "#cbb8dd", "#292522", "#f3bfc0"];
-    for (let i = 0; i < 80; i += 1) {
+    for (let i = 0; i < amount; i += 1) {
       const piece = document.createElement("i");
       piece.className = "confetti-piece";
       piece.style.left = `${Math.random() * 100}%`;
@@ -664,6 +675,112 @@
       confetti.appendChild(piece);
     }
   }
+
+  function celebrate() {
+    if (yesMessage.classList.contains("visible")) return;
+    finalActions.style.display = "none";
+    finalContent.classList.add("celebrating");
+    yesMessage.classList.add("visible");
+    navigator.vibrate?.([40, 60, 80]);
+    throwConfetti();
+  }
+
+  function renderThread() {
+    const stageRect = threadStage.getBoundingClientRect();
+    const maxPull = Math.max(62, stageRect.height * 0.5);
+    const pullInViewBox = (threadPullDistance / stageRect.height) * 170;
+    const pX = 55 + 215 * threadProgress;
+    const eX = 545 - 215 * threadProgress;
+    const knotY = 45 + Math.min(90, pullInViewBox);
+
+    threadLine.setAttribute("d", `M ${pX} 45 L 300 ${knotY} L ${eX} 45`);
+    threadP.style.left = `${(pX / 600) * 100}%`;
+    threadE.style.left = `${(eX / 600) * 100}%`;
+    threadPull.style.top = `${(knotY / 170) * 100}%`;
+    return maxPull;
+  }
+
+  function finishThread() {
+    pullingThread = false;
+    keyboardPull = false;
+    threadProgress = 1;
+    renderThread();
+    threadStage.classList.add("complete");
+    threadSuccess.classList.add("visible");
+    threadInstruction.textContent = "Together at last ♥";
+    navigator.vibrate?.([50, 45, 50, 45, 100]);
+    throwConfetti(110);
+  }
+
+  function animateThread(now) {
+    if (!pullingThread) return;
+    const maxPull = renderThread();
+    const tension = keyboardPull ? 1 : Math.max(0, Math.min(1, (threadPullDistance - 24) / (maxPull - 24)));
+    const elapsed = Math.min(40, now - threadLastFrame);
+    threadLastFrame = now;
+
+    if (tension > 0) {
+      threadProgress = Math.min(1, threadProgress + (elapsed / 2400) * (0.45 + tension * 0.55));
+      renderThread();
+      threadInstruction.textContent = threadProgress < 0.55 ? "Keep pulling… they’re getting closer" : "Almost together… keep holding";
+    }
+
+    if (threadProgress >= 1) {
+      finishThread();
+      return;
+    }
+    threadFrame = requestAnimationFrame(animateThread);
+  }
+
+  function beginThreadPull(event, fromKeyboard = false) {
+    if (threadStage.classList.contains("complete") || pullingThread) return;
+    event.preventDefault();
+    pullingThread = true;
+    keyboardPull = fromKeyboard;
+    threadStartY = event.clientY || 0;
+    threadPullDistance = fromKeyboard ? renderThread() : 0;
+    threadLastFrame = performance.now();
+    threadPull.classList.add("pulling");
+    if (!fromKeyboard) threadPull.setPointerCapture?.(event.pointerId);
+    threadFrame = requestAnimationFrame(animateThread);
+  }
+
+  function moveThreadPull(event) {
+    if (!pullingThread || keyboardPull) return;
+    const maxPull = Math.max(62, threadStage.getBoundingClientRect().height * 0.5);
+    threadPullDistance = Math.max(0, Math.min(maxPull, event.clientY - threadStartY));
+    renderThread();
+  }
+
+  function endThreadPull(event) {
+    if (!pullingThread) return;
+    pullingThread = false;
+    keyboardPull = false;
+    cancelAnimationFrame(threadFrame);
+    if (event?.pointerId !== undefined && threadPull.hasPointerCapture?.(event.pointerId)) {
+      threadPull.releasePointerCapture(event.pointerId);
+    }
+    threadPull.classList.remove("pulling");
+    threadPullDistance = 0;
+    renderThread();
+    threadInstruction.textContent = threadProgress > 0
+      ? "Pull again—don’t let them drift apart"
+      : "Pull our thread down and hold it tight";
+  }
+
+  threadPull.addEventListener("pointerdown", (event) => beginThreadPull(event));
+  threadPull.addEventListener("pointermove", moveThreadPull);
+  threadPull.addEventListener("pointerup", endThreadPull);
+  threadPull.addEventListener("pointercancel", endThreadPull);
+  threadPull.addEventListener("keydown", (event) => {
+    if ((event.key === " " || event.key === "Enter") && !event.repeat) beginThreadPull(event, true);
+  });
+  threadPull.addEventListener("keyup", (event) => {
+    if (event.key === " " || event.key === "Enter") endThreadPull(event);
+  });
+  window.addEventListener("resize", () => {
+    if (!pullingThread && !threadStage.classList.contains("complete")) renderThread();
+  });
 
   document.getElementById("yes-button").addEventListener("click", celebrate);
   document.getElementById("also-yes-button").addEventListener("click", celebrate);

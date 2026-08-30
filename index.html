@@ -444,6 +444,24 @@
           <div class="yes-message" id="yes-message" role="status">
             <span class="big-heart" aria-hidden="true">♥</span>
             <strong data-success-message>Best answer ever.</strong>
+            <div class="thread-game" id="thread-game">
+              <p class="thread-instruction" id="thread-instruction">Pull our thread down and hold it tight</p>
+              <div class="thread-stage" id="thread-stage">
+                <span class="thread-letter thread-p" id="thread-p" aria-label="P">P</span>
+                <svg class="love-thread" viewBox="0 0 600 170" preserveAspectRatio="none" aria-hidden="true">
+                  <path id="thread-line" d="M 55 45 L 300 45 L 545 45"></path>
+                </svg>
+                <button class="thread-pull" id="thread-pull" type="button" aria-describedby="thread-instruction">
+                  <span aria-hidden="true">♥</span>
+                  <small>pull</small>
+                </button>
+                <span class="thread-letter thread-e" id="thread-e" aria-label="E">E</span>
+                <div class="thread-success" id="thread-success" aria-live="polite">
+                  <span>P <i aria-hidden="true">♥</i> E</span>
+                  <strong>Great success!</strong>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
         <footer>Made with love by <span data-your-name>Pritesh</span></footer>
