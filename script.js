@@ -559,7 +559,7 @@
   // Crack the code: three Wordle rounds
   const wordRounds = config.wordGame?.rounds || [
     { answer: "GREEN", clue: "What colour has your heart claimed as its favourite?" },
-    { answer: "TINKY", clue: "What secret little name have I saved for you?", lateHint: "It starts with T." },
+    { answer: "TINKY", clue: "What alternative name have I saved you under in my contacts—the one only we know?", lateHint: "It starts with T." },
     { answer: "MONKEY", clue: "Which animal do I associate with your cutest chaotic energy?" },
   ];
   const wordGameCard = document.getElementById("word-game-card");

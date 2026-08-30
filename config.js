@@ -52,7 +52,7 @@ window.LOVE_STORY = {
       },
       {
         answer: "TINKY",
-        clue: "What secret little name have I saved for you?",
+        clue: "What alternative name have I saved you under in my contacts—the one only we know?",
         lateHint: "Emergency hint unlocked: it starts with T… because watching you investigate is adorable.",
         solved: "Tinky! The tiny name for the person who takes up the biggest space in my heart. ♥",
       },
