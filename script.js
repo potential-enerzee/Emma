@@ -1,0 +1,678 @@
+(function () {
+  "use strict";
+
+  const config = window.LOVE_STORY;
+  const scenes = [...document.querySelectorAll(".scene")];
+  const progressLabel = document.querySelector(".progress-label");
+  const progressFill = document.querySelector(".progress-fill");
+  let currentScene = "welcome";
+
+  function fillPersonalText() {
+    document.title = `For ${config.herName} — with love`;
+    document.querySelectorAll("[data-her-name]").forEach((element) => {
+      element.textContent = config.herName;
+    });
+    document.querySelectorAll("[data-your-name]").forEach((element) => {
+      element.textContent = element.classList.contains("secret-signoff")
+        ? `— ${config.yourName}`
+        : config.yourName;
+    });
+    document.querySelector("[data-intro]").textContent = config.intro;
+    document.querySelector("[data-secret-message]").textContent = config.secretMessage;
+    document.querySelector("[data-final-question]").textContent = config.finalQuestion;
+    document.querySelector("[data-final-note]").textContent = config.finalNote;
+    document.querySelector("[data-success-message]").textContent = config.successMessage;
+    document.querySelector(".brand-mark").textContent = config.herName.charAt(0).toUpperCase();
+  }
+
+  function goTo(sceneId) {
+    if (sceneId === currentScene) return;
+    const oldScene = document.getElementById(currentScene);
+    const nextScene = document.getElementById(sceneId);
+    if (!nextScene) return;
+
+    oldScene.classList.add("leaving");
+    oldScene.classList.remove("active");
+    window.setTimeout(() => oldScene.classList.remove("leaving"), 600);
+    nextScene.classList.add("active");
+    currentScene = sceneId;
+
+    const step = Number(nextScene.dataset.step || 1);
+    progressLabel.textContent = `${String(step).padStart(2, "0")} / 05`;
+    progressFill.style.width = `${step * 20}%`;
+
+    if (sceneId === "scratch") window.setTimeout(setupScratchCard, 80);
+    if (sceneId === "quiz") renderQuestion();
+    nextScene.querySelector("h1, h2")?.focus({ preventScroll: true });
+  }
+
+  document.querySelectorAll("[data-go]").forEach((button) => {
+    button.addEventListener("click", () => goTo(button.dataset.go));
+  });
+
+  document.querySelector(".brand").addEventListener("click", (event) => {
+    event.preventDefault();
+    window.location.reload();
+  });
+
+  // Opening hand-catch interaction
+  const welcomeScene = document.getElementById("welcome");
+  const catchStage = document.getElementById("catch-stage");
+  const welcomeNext = document.querySelector(".welcome-next");
+  const welcomeIntro = document.querySelector("[data-intro]");
+  const uppiesMoment = document.getElementById("uppies-moment");
+  const uppiesVideo = document.getElementById("uppies-video");
+  const uppiesNote = document.getElementById("uppies-note");
+  const videoNext = document.getElementById("video-next");
+  let handsCaught = false;
+
+  function positionReachingHand(event) {
+    if (handsCaught || event.pointerType === "touch") return;
+    const rect = catchStage.getBoundingClientRect();
+    const position = ((event.clientX - rect.left) / rect.width) * 100;
+    const clampedPosition = Math.max(13, Math.min(87, position));
+    catchStage.style.setProperty("--hand-x", `${clampedPosition}%`);
+  }
+
+  function catchHands() {
+    if (handsCaught) return;
+    handsCaught = true;
+    catchStage.classList.add("caught");
+    welcomeScene.classList.add("caught");
+    welcomeIntro.textContent =
+      config.caughtIntro || "You reached back. That’s how every good story begins.";
+    catchStage.setAttribute("aria-label", "You caught his hands with two fingers");
+    catchStage.disabled = true;
+    navigator.vibrate?.([25, 40, 25]);
+
+    uppiesMoment.classList.add("visible");
+    uppiesMoment.setAttribute("aria-hidden", "false");
+    uppiesVideo.currentTime = 0;
+    const playback = uppiesVideo.play();
+    playback?.catch(() => {
+      uppiesNote.textContent = "Tap play to watch our uppies moment ♥";
+    });
+  }
+
+  function finishUppies(message = "Worth the catch, don’t you think?") {
+    uppiesNote.textContent = message;
+    videoNext.hidden = false;
+    welcomeNext.disabled = false;
+    videoNext.focus({ preventScroll: true });
+  }
+
+  uppiesVideo.addEventListener("ended", () => finishUppies());
+  uppiesVideo.addEventListener("error", () => {
+    finishUppies("The video couldn’t load, but you still caught me ♥");
+  });
+
+  catchStage.addEventListener("pointermove", positionReachingHand);
+  catchStage.addEventListener("pointerdown", positionReachingHand);
+  catchStage.addEventListener("click", catchHands);
+
+  // Swipe cards
+  const cardStack = document.getElementById("card-stack");
+  const swipeComplete = document.getElementById("swipe-complete");
+  const swipeHint = document.getElementById("swipe-hint");
+  const laughMemory = document.getElementById("laugh-memory");
+  const memoryClose = document.getElementById("memory-close");
+  const memoryContinue = document.getElementById("memory-continue");
+  const energyMemory = document.getElementById("energy-memory");
+  const energyClose = document.getElementById("energy-close");
+  const energyContinue = document.getElementById("energy-continue");
+  const energyVideo = document.getElementById("energy-video");
+  const energyActionVideo = document.getElementById("energy-action-video");
+  const energyNote = document.getElementById("energy-note");
+  const littleMemory = document.getElementById("little-memory");
+  const littleClose = document.getElementById("little-close");
+  const littleContinue = document.getElementById("little-continue");
+  const simplyUsMemory = document.getElementById("simply-us-memory");
+  const usScratchSteps = [...document.querySelectorAll(".us-scratch-step")];
+  const usStepDots = [...document.querySelectorAll(".us-step-progress i")];
+  const usStepLabel = document.querySelector(".us-step-label");
+  const usFinish = document.getElementById("us-finish");
+  let remainingCards = config.reasons.length;
+
+  function openLaughMemory() {
+    laughMemory.classList.add("visible");
+    laughMemory.setAttribute("aria-hidden", "false");
+    window.setTimeout(() => memoryContinue.focus({ preventScroll: true }), 350);
+  }
+
+  function closeLaughMemory() {
+    laughMemory.classList.remove("visible");
+    laughMemory.setAttribute("aria-hidden", "true");
+    swipeHint.querySelector("span:nth-child(2)").textContent = "keep swiping";
+  }
+
+  function openEnergyMemory() {
+    energyMemory.classList.add("visible");
+    energyMemory.setAttribute("aria-hidden", "false");
+    energyVideo.currentTime = 0;
+    energyActionVideo.currentTime = 0;
+    energyNote.textContent = "Somehow, every adventure stores a little more energy for our next one.";
+    const playback = energyVideo.play();
+    energyActionVideo.play().catch(() => {});
+    playback?.catch(() => {
+      energyNote.textContent = "Tap play to set our potential energy in motion ♥";
+    });
+    window.setTimeout(() => energyContinue.focus({ preventScroll: true }), 500);
+  }
+
+  function closeEnergyMemory() {
+    energyVideo.pause();
+    energyActionVideo.pause();
+    energyMemory.classList.remove("visible");
+    energyMemory.setAttribute("aria-hidden", "true");
+    swipeHint.querySelector("span:nth-child(2)").textContent = "keep swiping";
+  }
+
+  function openLittleMemory() {
+    littleMemory.classList.add("visible");
+    littleMemory.setAttribute("aria-hidden", "false");
+    window.setTimeout(() => littleContinue.focus({ preventScroll: true }), 400);
+  }
+
+  function closeLittleMemory() {
+    littleMemory.classList.remove("visible");
+    littleMemory.setAttribute("aria-hidden", "true");
+    swipeHint.querySelector("span:nth-child(2)").textContent = "keep swiping";
+  }
+
+  function openSimplyUsMemory() {
+    simplyUsMemory.classList.add("visible");
+    simplyUsMemory.setAttribute("aria-hidden", "false");
+    showUsScratchStep(0);
+  }
+
+  function closeSimplyUsMemory() {
+    simplyUsMemory.classList.remove("visible");
+    simplyUsMemory.setAttribute("aria-hidden", "true");
+    document.querySelector("#swipe-complete button")?.focus({ preventScroll: true });
+  }
+
+  function showUsScratchStep(index) {
+    usScratchSteps.forEach((step, stepIndex) => {
+      step.classList.toggle("active", stepIndex === index);
+    });
+    usStepDots.forEach((dot, dotIndex) => {
+      dot.classList.toggle("active", dotIndex === index);
+      dot.classList.toggle("done", dotIndex < index);
+    });
+    usStepLabel.textContent = `${index + 1} / ${usScratchSteps.length}`;
+    window.setTimeout(() => setupUsScratchCanvas(index), 60);
+  }
+
+  function setupUsScratchCanvas(index) {
+    const step = usScratchSteps[index];
+    const canvas = step.querySelector(".us-scratch-canvas");
+    if (canvas.dataset.ready === "true") return;
+
+    const rect = canvas.getBoundingClientRect();
+    const ratio = Math.min(window.devicePixelRatio || 1, 2);
+    canvas.width = Math.floor(rect.width * ratio);
+    canvas.height = Math.floor(rect.height * ratio);
+    const context = canvas.getContext("2d", { willReadFrequently: true });
+    context.scale(ratio, ratio);
+
+    const covers = [
+      ["#df7267", "#bd5048"],
+      ["#bca6d2", "#977caf"],
+      ["#aabca4", "#7f9979"],
+      ["#e8c96f", "#d19e52"],
+    ];
+    const gradient = context.createLinearGradient(0, 0, rect.width, rect.height);
+    gradient.addColorStop(0, covers[index][0]);
+    gradient.addColorStop(1, covers[index][1]);
+    context.fillStyle = gradient;
+    context.fillRect(0, 0, rect.width, rect.height);
+
+    context.fillStyle = "rgba(255,255,255,.16)";
+    for (let i = 0; i < 22; i += 1) {
+      const x = ((i * 83) % Math.max(1, rect.width - 30)) + 15;
+      const y = ((i * 57) % Math.max(1, rect.height - 30)) + 15;
+      context.beginPath();
+      context.arc(x, y, 3 + (i % 4), 0, Math.PI * 2);
+      context.fill();
+    }
+
+    context.fillStyle = "rgba(255,255,255,.94)";
+    context.textAlign = "center";
+    context.textBaseline = "middle";
+    context.font = `800 ${Math.max(12, Math.min(17, rect.width / 48))}px Inter, sans-serif`;
+    context.fillText(`SCRATCH ${index + 1} OF ${usScratchSteps.length}`, rect.width / 2, rect.height / 2 - 12);
+    context.font = `${Math.max(23, Math.min(36, rect.width / 24))}px Georgia, serif`;
+    context.fillText(index === 3 ? "one last memory ♥" : "three memories underneath ✦", rect.width / 2, rect.height / 2 + 26);
+    context.setTransform(1, 0, 0, 1, 0, 0);
+
+    let scratchingThisCanvas = false;
+    let checks = 0;
+
+    function erase(event) {
+      if (!scratchingThisCanvas || canvas.classList.contains("cleared")) return;
+      const bounds = canvas.getBoundingClientRect();
+      const pixelRatio = canvas.width / bounds.width;
+      const x = (event.clientX - bounds.left) * pixelRatio;
+      const y = (event.clientY - bounds.top) * pixelRatio;
+      context.save();
+      context.globalCompositeOperation = "destination-out";
+      context.beginPath();
+      context.arc(x, y, Math.max(24, bounds.width * 0.045) * pixelRatio, 0, Math.PI * 2);
+      context.fill();
+      context.restore();
+      checks += 1;
+      if (checks % 7 === 0) checkUsScratchProgress(step, canvas, context);
+    }
+
+    canvas.addEventListener("pointerdown", (event) => {
+      scratchingThisCanvas = true;
+      canvas.setPointerCapture(event.pointerId);
+      erase(event);
+    });
+    canvas.addEventListener("pointermove", erase);
+    canvas.addEventListener("pointerup", (event) => {
+      scratchingThisCanvas = false;
+      if (canvas.hasPointerCapture(event.pointerId)) canvas.releasePointerCapture(event.pointerId);
+      checkUsScratchProgress(step, canvas, context);
+    });
+    canvas.addEventListener("pointercancel", () => { scratchingThisCanvas = false; });
+    canvas.dataset.ready = "true";
+  }
+
+  function checkUsScratchProgress(step, canvas, context) {
+    if (canvas.classList.contains("cleared")) return;
+    const pixels = context.getImageData(0, 0, canvas.width, canvas.height).data;
+    let clear = 0;
+    for (let i = 3; i < pixels.length; i += 64) {
+      if (pixels[i] < 80) clear += 1;
+    }
+    const percent = (clear / (pixels.length / 64)) * 100;
+    if (percent >= 38) {
+      canvas.classList.add("cleared");
+      const footer = step.querySelector(".us-scratch-footer");
+      footer.querySelector(":scope > span").textContent = "Memories revealed ♥";
+      footer.querySelector("button").hidden = false;
+    }
+  }
+
+  memoryClose.addEventListener("click", closeLaughMemory);
+  memoryContinue.addEventListener("click", closeLaughMemory);
+  energyClose.addEventListener("click", closeEnergyMemory);
+  energyContinue.addEventListener("click", closeEnergyMemory);
+  littleClose.addEventListener("click", closeLittleMemory);
+  littleContinue.addEventListener("click", closeLittleMemory);
+  document.querySelectorAll("[data-us-next]").forEach((button) => {
+    button.addEventListener("click", () => showUsScratchStep(Number(button.dataset.usNext)));
+  });
+  usFinish.addEventListener("click", closeSimplyUsMemory);
+  energyVideo.addEventListener("ended", () => {
+    energyNote.textContent = "Potential energy transformed into one of my favorite memories.";
+  });
+  energyVideo.addEventListener("error", () => {
+    energyNote.textContent = "The video couldn’t load, but our formula still works: P + E ♥";
+  });
+  document.addEventListener("keydown", (event) => {
+    if (event.key === "Escape" && laughMemory.classList.contains("visible")) {
+      closeLaughMemory();
+    }
+    if (event.key === "Escape" && energyMemory.classList.contains("visible")) {
+      closeEnergyMemory();
+    }
+    if (event.key === "Escape" && littleMemory.classList.contains("visible")) {
+      closeLittleMemory();
+    }
+  });
+
+  function makeCard(reason, index) {
+    const hasLaughMemory = reason.number === "01";
+    const hasEnergyMemory = reason.number === "02";
+    const hasLittleMemory = reason.number === "03";
+    const hasSimplyUsMemory = reason.number === "04";
+    const hasSpecialMemory = hasLaughMemory || hasEnergyMemory || hasLittleMemory || hasSimplyUsMemory;
+    const card = document.createElement("article");
+    card.className = `reason-card ${reason.color || "coral"}${hasSpecialMemory ? " memory-card" : ""}`;
+    card.style.zIndex = String(index + 1);
+    if (hasSpecialMemory) {
+      card.tabIndex = 0;
+      card.setAttribute("role", "button");
+      card.setAttribute(
+        "aria-label",
+        hasLaughMemory
+          ? "Our laugh. Tap or drag to open this memory."
+          : hasEnergyMemory
+            ? "Potential Energy. Tap or drag to open this memory."
+            : hasLittleMemory
+              ? "The little things. Tap or drag to open these memories."
+              : "Simply us. Tap or drag to begin four scratch reveals.",
+      );
+    }
+    card.innerHTML = `
+      <span class="card-number">REASON ${reason.number || String(index + 1).padStart(2, "0")}</span>
+      ${hasSpecialMemory ? '<span class="memory-hint">tap or drag me</span>' : ""}
+      <div class="card-doodle ${reason.doodle || "heart"}" aria-hidden="true"></div>
+      <h3>${escapeHTML(reason.title)}</h3>
+      <p>${escapeHTML(reason.text)}</p>
+    `;
+
+    let startX = 0;
+    let deltaX = 0;
+    let dragging = false;
+
+    card.addEventListener("pointerdown", (event) => {
+      if (card !== cardStack.lastElementChild) return;
+      dragging = true;
+      startX = event.clientX;
+      card.classList.add("dragging");
+      card.setPointerCapture(event.pointerId);
+    });
+
+    card.addEventListener("pointermove", (event) => {
+      if (!dragging) return;
+      deltaX = event.clientX - startX;
+      const rotation = deltaX / 14;
+      card.style.transform = `translateX(${deltaX}px) rotate(${rotation}deg)`;
+    });
+
+    function sendCardAway(direction, afterSwipe) {
+      if (card.classList.contains("swiped")) return;
+      card.classList.add("swiped");
+      card.style.transform = `translateX(${direction * 120}vw) rotate(${direction * 28}deg)`;
+      window.setTimeout(() => {
+        card.remove();
+        remainingCards -= 1;
+        if (remainingCards === 0) {
+          swipeHint.style.visibility = "hidden";
+          swipeComplete.classList.add("visible");
+        }
+        afterSwipe?.();
+      }, 350);
+    }
+
+    function release(event) {
+      if (!dragging) return;
+      dragging = false;
+      card.classList.remove("dragging");
+      if (card.hasPointerCapture(event.pointerId)) card.releasePointerCapture(event.pointerId);
+
+      if (event.type === "pointercancel") {
+        card.style.transform = "";
+        deltaX = 0;
+        return;
+      }
+
+      if (hasLaughMemory) {
+        const direction = deltaX < -10 ? -1 : 1;
+        sendCardAway(direction, openLaughMemory);
+        deltaX = 0;
+        return;
+      }
+
+      if (hasEnergyMemory) {
+        const direction = deltaX < -10 ? -1 : 1;
+        openEnergyMemory();
+        sendCardAway(direction);
+        deltaX = 0;
+        return;
+      }
+
+
+      if (hasLittleMemory) {
+        const direction = deltaX < -10 ? -1 : 1;
+        sendCardAway(direction, openLittleMemory);
+        deltaX = 0;
+        return;
+      }
+
+      if (hasSimplyUsMemory) {
+        const direction = deltaX < -10 ? -1 : 1;
+        sendCardAway(direction, openSimplyUsMemory);
+        deltaX = 0;
+        return;
+      }
+
+      if (Math.abs(deltaX) > 80) {
+        const direction = deltaX < 0 ? -1 : 1;
+        sendCardAway(direction);
+      } else {
+        card.style.transform = "";
+      }
+      deltaX = 0;
+    }
+
+    card.addEventListener("pointerup", release);
+    card.addEventListener("pointercancel", release);
+    if (hasSpecialMemory) {
+      card.addEventListener("keydown", (event) => {
+        if ((event.key === "Enter" || event.key === " ") && card === cardStack.lastElementChild) {
+          event.preventDefault();
+          if (hasLaughMemory) {
+            sendCardAway(1, openLaughMemory);
+          } else if (hasEnergyMemory) {
+            openEnergyMemory();
+            sendCardAway(1);
+          } else if (hasLittleMemory) {
+            sendCardAway(1, openLittleMemory);
+          } else {
+            sendCardAway(1, openSimplyUsMemory);
+          }
+        }
+      });
+    }
+    return card;
+  }
+
+  // Add them in reverse DOM order so reason 01 sits at the top of the stack.
+  config.reasons
+    .slice()
+    .reverse()
+    .forEach((reason, index) => cardStack.appendChild(makeCard(reason, index)));
+
+  // Scratch card
+  const scratchCanvas = document.getElementById("scratch-canvas");
+  const scratchWrap = document.getElementById("scratch-wrap");
+  const scratchPercent = document.getElementById("scratch-percent");
+  const scratchNext = document.getElementById("scratch-next");
+  let scratchReady = false;
+  let scratching = false;
+  let scratchChecks = 0;
+
+  function setupScratchCard() {
+    if (scratchReady) return;
+    const rect = scratchCanvas.getBoundingClientRect();
+    const ratio = Math.min(window.devicePixelRatio || 1, 2);
+    scratchCanvas.width = Math.floor(rect.width * ratio);
+    scratchCanvas.height = Math.floor(rect.height * ratio);
+    const context = scratchCanvas.getContext("2d", { willReadFrequently: true });
+    context.scale(ratio, ratio);
+
+    const gradient = context.createLinearGradient(0, 0, rect.width, rect.height);
+    gradient.addColorStop(0, "#c9b6d9");
+    gradient.addColorStop(1, "#ad96c2");
+    context.fillStyle = gradient;
+    context.fillRect(0, 0, rect.width, rect.height);
+
+    context.fillStyle = "rgba(255,255,255,.9)";
+    context.textAlign = "center";
+    context.textBaseline = "middle";
+    context.font = `700 ${Math.max(12, Math.min(16, rect.width / 36))}px Inter, sans-serif`;
+    context.fillText("SCRATCH TO REVEAL", rect.width / 2, rect.height / 2 - 7);
+    context.font = "24px Georgia, serif";
+    context.fillText("✦  ✦  ✦", rect.width / 2, rect.height / 2 + 28);
+    // Pointer coordinates below are converted to physical pixels, so remove the
+    // setup transform before the erasing phase.
+    context.setTransform(1, 0, 0, 1, 0, 0);
+    scratchReady = true;
+  }
+
+  function scratchAt(event) {
+    if (!scratching || scratchCanvas.classList.contains("cleared")) return;
+    const rect = scratchCanvas.getBoundingClientRect();
+    const ratio = scratchCanvas.width / rect.width;
+    const x = (event.clientX - rect.left) * ratio;
+    const y = (event.clientY - rect.top) * ratio;
+    const context = scratchCanvas.getContext("2d", { willReadFrequently: true });
+    context.save();
+    context.globalCompositeOperation = "destination-out";
+    context.beginPath();
+    context.arc(x, y, 27 * ratio, 0, Math.PI * 2);
+    context.fill();
+    context.restore();
+
+    scratchChecks += 1;
+    if (scratchChecks % 7 === 0) updateScratchProgress(context);
+  }
+
+  function updateScratchProgress(context) {
+    const pixels = context.getImageData(0, 0, scratchCanvas.width, scratchCanvas.height).data;
+    let clear = 0;
+    for (let i = 3; i < pixels.length; i += 48) {
+      if (pixels[i] < 80) clear += 1;
+    }
+    const totalSampled = pixels.length / 48;
+    const percent = Math.min(100, Math.round((clear / totalSampled) * 100));
+    scratchPercent.textContent = `${percent}% revealed`;
+    if (percent >= 42) {
+      scratchCanvas.classList.add("cleared");
+      scratchPercent.textContent = "Secret revealed";
+      scratchNext.classList.remove("hidden");
+    }
+  }
+
+  scratchCanvas.addEventListener("pointerdown", (event) => {
+    scratching = true;
+    scratchWrap.classList.add("started");
+    scratchCanvas.setPointerCapture(event.pointerId);
+    scratchAt(event);
+  });
+  scratchCanvas.addEventListener("pointermove", scratchAt);
+  scratchCanvas.addEventListener("pointerup", (event) => {
+    scratching = false;
+    if (scratchCanvas.hasPointerCapture(event.pointerId)) scratchCanvas.releasePointerCapture(event.pointerId);
+    updateScratchProgress(scratchCanvas.getContext("2d", { willReadFrequently: true }));
+  });
+  scratchCanvas.addEventListener("pointercancel", () => { scratching = false; });
+
+  // Quiz
+  let questionIndex = 0;
+  const quizCard = document.getElementById("quiz-card");
+  const quizCount = document.getElementById("quiz-count");
+  const quizQuestion = document.getElementById("quiz-question");
+  const quizAnswers = document.getElementById("quiz-answers");
+
+  function renderQuestion() {
+    const item = config.questions[questionIndex];
+    if (!item) return;
+    quizCount.textContent = `Question ${questionIndex + 1} of ${config.questions.length}`;
+    quizQuestion.textContent = item.question;
+    quizAnswers.replaceChildren();
+    item.answers.forEach((answer) => {
+      const button = document.createElement("button");
+      button.className = "answer-button";
+      button.textContent = answer;
+      button.addEventListener("click", chooseAnswer);
+      quizAnswers.appendChild(button);
+    });
+  }
+
+  function chooseAnswer() {
+    if (quizCard.classList.contains("switching")) return;
+    if (questionIndex === config.questions.length - 1) {
+      goTo("hold");
+      return;
+    }
+    quizCard.classList.add("switching");
+    window.setTimeout(() => {
+      questionIndex += 1;
+      renderQuestion();
+    }, 190);
+    window.setTimeout(() => quizCard.classList.remove("switching"), 430);
+  }
+
+  // Hold to unlock
+  const holdButton = document.getElementById("hold-button");
+  const holdLabel = document.getElementById("hold-label");
+  const ring = document.querySelector(".ring-progress");
+  const ringLength = 339.292;
+  let holding = false;
+  let holdStart = 0;
+  let holdFrame = 0;
+  const holdDuration = 1800;
+
+  function beginHold(event) {
+    event.preventDefault();
+    if (holding) return;
+    holding = true;
+    holdStart = performance.now();
+    holdButton.classList.add("holding");
+    holdButton.setPointerCapture?.(event.pointerId);
+    holdFrame = requestAnimationFrame(updateHold);
+  }
+
+  function updateHold(now) {
+    if (!holding) return;
+    const progress = Math.min(1, (now - holdStart) / holdDuration);
+    ring.style.strokeDashoffset = String(ringLength * (1 - progress));
+    holdLabel.textContent = progress < 0.35 ? "keep holding" : progress < 0.78 ? "almost there" : "don't let go";
+    if (progress >= 1) {
+      holding = false;
+      navigator.vibrate?.([30, 50, 30]);
+      goTo("final");
+      return;
+    }
+    holdFrame = requestAnimationFrame(updateHold);
+  }
+
+  function cancelHold() {
+    if (!holding) return;
+    holding = false;
+    cancelAnimationFrame(holdFrame);
+    holdButton.classList.remove("holding");
+    ring.style.strokeDashoffset = String(ringLength);
+    holdLabel.textContent = "hold me";
+  }
+
+  holdButton.addEventListener("pointerdown", beginHold);
+  holdButton.addEventListener("pointerup", cancelHold);
+  holdButton.addEventListener("pointercancel", cancelHold);
+  holdButton.addEventListener("pointerleave", cancelHold);
+  holdButton.addEventListener("keydown", (event) => {
+    if ((event.key === " " || event.key === "Enter") && !holding) beginHold(event);
+  });
+  holdButton.addEventListener("keyup", cancelHold);
+
+  // Celebration
+  const finalActions = document.getElementById("final-actions");
+  const yesMessage = document.getElementById("yes-message");
+  const confetti = document.getElementById("confetti");
+
+  function celebrate() {
+    if (yesMessage.classList.contains("visible")) return;
+    finalActions.style.display = "none";
+    yesMessage.classList.add("visible");
+    navigator.vibrate?.([40, 60, 80]);
+
+    const colors = ["#fffaf6", "#efd88f", "#cbb8dd", "#292522", "#f3bfc0"];
+    for (let i = 0; i < 80; i += 1) {
+      const piece = document.createElement("i");
+      piece.className = "confetti-piece";
+      piece.style.left = `${Math.random() * 100}%`;
+      piece.style.background = colors[Math.floor(Math.random() * colors.length)];
+      piece.style.borderRadius = Math.random() > 0.6 ? "50%" : "1px";
+      piece.style.setProperty("--fall-x", `${(Math.random() - 0.5) * 180}px`);
+      piece.style.setProperty("--fall-duration", `${2.4 + Math.random() * 2.4}s`);
+      piece.style.setProperty("--fall-delay", `${Math.random() * 0.5}s`);
+      confetti.appendChild(piece);
+    }
+  }
+
+  document.getElementById("yes-button").addEventListener("click", celebrate);
+  document.getElementById("also-yes-button").addEventListener("click", celebrate);
+
+  function escapeHTML(value) {
+    const element = document.createElement("span");
+    element.textContent = String(value);
+    return element.innerHTML;
+  }
+
+  fillPersonalText();
+})();

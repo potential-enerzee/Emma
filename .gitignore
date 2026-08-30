@@ -1,0 +1,9 @@
+# Keep the original phone recording private; the metadata-free web copy is published.
+videos/*.mov
+videos/*.MOV
+
+# Publish only the cleaned, optimized JPGs in images/web.
+images/*.heic
+images/*.HEIC
+images/*.jpeg
+images/*.JPEG

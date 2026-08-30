@@ -1,0 +1,455 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#f8eee8" />
+    <meta
+      name="description"
+      content="A tiny interactive love story, made especially for someone wonderful."
+    />
+    <title>A little something for you</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div class="noise" aria-hidden="true"></div>
+    <div class="ambient ambient-one" aria-hidden="true"></div>
+    <div class="ambient ambient-two" aria-hidden="true"></div>
+
+    <main class="app" id="app">
+      <header class="topbar">
+        <a class="brand" href="#" aria-label="Start over">
+          <span class="brand-mark">E</span>
+          <span>for you</span>
+        </a>
+        <div class="chapter-progress" aria-label="Journey progress">
+          <span class="progress-label">01 / 05</span>
+          <div class="progress-track"><span class="progress-fill"></span></div>
+        </div>
+      </header>
+
+      <section class="scene active" id="welcome" data-step="1" aria-labelledby="welcome-title">
+        <div class="welcome-copy">
+          <p class="eyebrow">Before our little adventure</p>
+          <h1 id="welcome-title">
+            <span class="pre-catch">Catch my <em>hand.</em></span>
+            <span class="post-catch">Got me, <em data-her-name>Emma</em>.</span>
+          </h1>
+          <p class="lede" data-intro>
+            I’ll keep jumping until you catch me. Move your hand, then tap me!
+          </p>
+          <button class="primary-button welcome-next" data-go="swipe" disabled>
+            <span>Begin the adventure</span>
+            <span class="button-arrow" aria-hidden="true">↗</span>
+          </button>
+        </div>
+
+        <button
+          class="catch-stage"
+          id="catch-stage"
+          type="button"
+          aria-label="Catch his raised hands with the two fingers"
+        >
+          <span class="stage-sun" aria-hidden="true">✦</span>
+          <span class="stage-cloud cloud-one" aria-hidden="true"></span>
+          <span class="stage-cloud cloud-two" aria-hidden="true"></span>
+
+          <span class="reaching-hand" id="reaching-hand" aria-hidden="true">
+            <svg viewBox="0 0 100 220" role="presentation">
+              <path class="finger-skin" d="M8-12h31v150c0 18-6 29-15 29S8 156 8 138z" />
+              <path class="finger-skin" d="M61-12h31v150c0 18-7 29-16 29s-15-11-15-29z" />
+              <path class="finger-nail" d="M15 128c0-10 4-16 9-16s9 6 9 16v13c0 9-4 14-9 14s-9-5-9-14z" />
+              <path class="finger-nail" d="M68 128c0-10 4-16 8-16 6 0 10 6 10 16v13c0 9-4 14-10 14-4 0-8-5-8-14z" />
+            </svg>
+          </span>
+
+          <span class="jumper" aria-hidden="true">
+            <svg viewBox="0 0 170 245" role="presentation">
+              <ellipse class="jumper-shadow" cx="85" cy="232" rx="42" ry="8" />
+              <g class="little-man">
+                <path class="leg" d="M70 183l-8 39M99 183l9 39" />
+                <path class="shoe" d="M61 220l-14 7h19M108 220l14 7h-19" />
+                <path class="shirt" d="M57 115q28-17 56 0l-8 76H65z" />
+                <path class="raised-arm" d="M63 124C47 104 45 70 47 45M107 124c16-20 18-54 16-79" />
+                <circle class="raised-palm" cx="47" cy="39" r="8" />
+                <circle class="raised-palm" cx="123" cy="39" r="8" />
+                <circle class="head" cx="85" cy="88" r="34" />
+                <path class="hair" d="M53 84c0-25 14-39 33-39 20 0 33 13 34 34-11-5-17-13-21-21-8 11-23 19-46 21z" />
+                <circle class="eye" cx="73" cy="88" r="2.5" />
+                <circle class="eye" cx="98" cy="88" r="2.5" />
+                <path class="smile" d="M76 101q9 9 19 0" />
+                <path class="shirt-heart" d="M85 137c-8-12-22 0 0 15 22-15 8-27 0-15z" />
+              </g>
+            </svg>
+          </span>
+
+          <span class="catch-spark" aria-hidden="true">♥</span>
+          <span class="stage-ground" aria-hidden="true"></span>
+          <span class="catch-prompt">
+            <span class="prompt-before">tap to catch me</span>
+            <span class="prompt-after">hands held. heart full.</span>
+          </span>
+        </button>
+
+        <div class="catch-status" id="catch-status" aria-live="polite">
+          <span>The fingers follow your pointer</span>
+          <span>Perfect catch!</span>
+        </div>
+
+        <div class="uppies-moment" id="uppies-moment" aria-hidden="true">
+          <div class="uppies-card" role="dialog" aria-labelledby="uppies-title" aria-modal="true">
+            <div class="uppies-video-frame">
+              <video id="uppies-video" playsinline controls preload="metadata">
+                <source src="videos/uppies.mp4" type="video/mp4" />
+                Your browser does not support this video.
+              </video>
+              <span class="video-heart" aria-hidden="true">♥</span>
+            </div>
+            <div class="uppies-copy">
+              <p class="eyebrow">Mission accomplished</p>
+              <h2 id="uppies-title">Uppies!</h2>
+              <p id="uppies-note">You caught me. This one’s for you.</p>
+              <button class="primary-button video-next" id="video-next" data-go="swipe" hidden>
+                <span>Continue our adventure</span>
+                <span class="button-arrow" aria-hidden="true">↗</span>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <p class="sound-note">He’ll keep trying until you reach back.</p>
+      </section>
+
+      <section class="scene" id="swipe" data-step="2" aria-labelledby="swipe-title">
+        <div class="scene-heading">
+          <p class="eyebrow">Chapter one</p>
+          <h2 id="swipe-title">A few reasons<br />we are awesome!!</h2>
+          <p>Swipe each card away to keep going.</p>
+        </div>
+
+        <div class="card-area">
+          <div class="card-stack" id="card-stack" aria-live="polite"></div>
+          <div class="swipe-hint" id="swipe-hint">
+            <span aria-hidden="true">←</span>
+            <span>drag to swipe</span>
+            <span aria-hidden="true">→</span>
+          </div>
+        </div>
+
+        <div class="chapter-complete" id="swipe-complete">
+          <p>And honestly, I could keep going.</p>
+          <button class="text-button" data-go="scratch">There’s more <span>→</span></button>
+        </div>
+
+        <div class="laugh-memory" id="laugh-memory" aria-hidden="true">
+          <div class="laugh-sheet" role="dialog" aria-modal="true" aria-labelledby="laugh-memory-title">
+            <button class="memory-close" id="memory-close" type="button" aria-label="Close this memory">×</button>
+
+            <div class="photo-collage" aria-label="Three silly photos of us">
+              <figure class="polaroid polaroid-one">
+                <img src="images/web/laugh-her.jpg" alt="A candid laughing close-up" />
+                <figcaption>the laugh</figcaption>
+              </figure>
+              <figure class="polaroid polaroid-two">
+                <img src="images/web/laugh-him.jpg" alt="A wonderfully silly close-up" />
+                <figcaption>the face</figcaption>
+              </figure>
+              <figure class="polaroid polaroid-three">
+                <img src="images/web/laugh-her-silly.jpg" alt="A matching silly face" />
+                <figcaption>the sequel</figcaption>
+              </figure>
+              <span class="memory-sticker sticker-hehe" aria-hidden="true">hehe!</span>
+              <span class="memory-sticker sticker-stars" aria-hidden="true">✦ ✦</span>
+              <span class="memory-heart" aria-hidden="true">♥</span>
+            </div>
+
+            <div class="laugh-copy">
+              <p class="eyebrow">Exhibit A, B & C</p>
+              <h2 id="laugh-memory-title">Our shared sense<br />of ridiculous.</h2>
+              <p>The best kind of love is being completely silly together—and laughing until nothing makes sense.</p>
+              <button class="primary-button" id="memory-continue" type="button">
+                <span>Keep the memories coming</span>
+                <span class="button-arrow" aria-hidden="true">→</span>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <div class="energy-memory" id="energy-memory" aria-hidden="true">
+          <div class="energy-sheet" role="dialog" aria-modal="true" aria-labelledby="energy-memory-title">
+            <button class="memory-close" id="energy-close" type="button" aria-label="Close this memory">×</button>
+
+            <div class="energy-copy">
+              <p class="eyebrow">A very scientific discovery</p>
+              <h2 id="energy-memory-title">Potential<br /><em>Energy.</em></h2>
+              <div class="energy-equation" aria-label="P plus E equals Pritesh plus Emma, प्रितेश plus एम्मा">
+                <span>P</span><b>+</b><span>E</span><b>=</b>
+                <strong><span data-your-name>Pritesh</span> + <span data-her-name>Emma</span></strong>
+                <strong class="energy-hindi" lang="hi">प्रितेश + एम्मा</strong>
+              </div>
+              <p class="energy-note" id="energy-note">
+                Somehow, every adventure stores a little more energy for our next one.
+              </p>
+              <button class="primary-button" id="energy-continue" type="button">
+                <span>Keep exploring</span>
+                <span class="button-arrow" aria-hidden="true">→</span>
+              </button>
+            </div>
+
+            <div class="energy-gallery">
+              <figure class="energy-photo energy-heart-photo">
+                <img src="images/web/potential-heart.jpg" alt="P plus E drawn together inside a heart in the sand" />
+                <figcaption>the formula ♡</figcaption>
+              </figure>
+              <div class="energy-video-frame">
+                <video id="energy-video" playsinline controls preload="metadata" poster="images/web/potential-waterfall.jpg">
+                  <source src="videos/potential-energy.mp4" type="video/mp4" />
+                  Your browser does not support this video.
+                </video>
+                <span class="energy-badge" aria-hidden="true">P + E</span>
+              </div>
+              <div class="energy-action-frame">
+                <video
+                  id="energy-action-video"
+                  muted
+                  loop
+                  playsinline
+                  preload="metadata"
+                  aria-label="Pritesh and Emma putting their energy into action"
+                >
+                  <source src="videos/energy-action.mp4" type="video/mp4" />
+                </video>
+                <span>energy in motion ✦</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="little-memory" id="little-memory" aria-hidden="true">
+          <div class="little-sheet" role="dialog" aria-modal="true" aria-labelledby="little-memory-title">
+            <button class="memory-close" id="little-close" type="button" aria-label="Close this memory">×</button>
+
+            <div class="little-heading">
+              <p class="eyebrow">The tiny moments</p>
+              <h2 id="little-memory-title">The little things.</h2>
+              <p>Turns out, they were never really little.</p>
+            </div>
+
+            <div class="little-reel" aria-label="A scrollable collection of our little moments">
+              <figure class="little-photo">
+                <img src="images/web/little-things-1.jpg" alt="Pritesh smiling in an oversized shirt" />
+                <figcaption>Not that little 😉</figcaption>
+              </figure>
+              <figure class="little-photo">
+                <img src="images/web/little-things-2.jpg" alt="A cozy close-up together" />
+                <figcaption>The cozy little moments</figcaption>
+              </figure>
+              <figure class="little-photo">
+                <img src="images/web/little-things-3.jpg" alt="A playful sunny photo together" />
+                <figcaption>The silly little angles</figcaption>
+              </figure>
+              <figure class="little-photo">
+                <img src="images/web/little-things-4.jpg" alt="Relaxing together overlooking the beach" />
+                <figcaption>The peaceful little pauses</figcaption>
+              </figure>
+              <figure class="little-photo">
+                <img src="images/web/little-things-kiwi.jpg" alt="Kiwi and the other cows in a green field" />
+                <figcaption>
+                  Kiwi says muaahh 😘
+                  <small>(Kiwi loves you because you love kiwi for breakfast)</small>
+                </figcaption>
+              </figure>
+            </div>
+
+            <div class="little-footer">
+              <span>Swipe the photos ↔</span>
+              <button class="primary-button" id="little-continue" type="button">
+                <span>One more reason</span>
+                <span class="button-arrow" aria-hidden="true">→</span>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <div class="simply-us-memory" id="simply-us-memory" aria-hidden="true">
+          <div class="us-sheet" role="dialog" aria-modal="true" aria-labelledby="simply-us-title">
+            <header class="us-header">
+              <div>
+                <p class="eyebrow">The final reason</p>
+                <h2 id="simply-us-title">Simply us.</h2>
+              </div>
+              <div class="us-step-progress" aria-label="Scratch layer progress">
+                <span class="us-step-label">1 / 4</span>
+                <i class="active"></i><i></i><i></i><i></i>
+              </div>
+            </header>
+
+            <div class="us-scratch-steps">
+              <section class="us-scratch-step active" data-us-step="0">
+                <div class="us-scratch-card">
+                  <div class="us-reveal-card us-reveal-one">
+                    <div class="us-photo-grid">
+                      <img src="images/web/simply-us-1.jpg" alt="Emma walking along a country road" />
+                      <img src="images/web/simply-us-2.jpg" alt="Emma making a wonderfully silly face among flowers" />
+                      <img class="us-landscape" src="images/web/simply-us-3.jpg" alt="Pritesh and Emma smiling together in the car" />
+                    </div>
+                    <p>Every road, every laugh, every ride.</p>
+                  </div>
+                  <canvas class="us-scratch-canvas" aria-label="Scratch to uncover photos one through three"></canvas>
+                </div>
+                <div class="us-scratch-footer">
+                  <span>Scratch to uncover 1–3</span>
+                  <button class="text-button us-next" type="button" data-us-next="1" hidden>Next layer <span>→</span></button>
+                </div>
+              </section>
+
+              <section class="us-scratch-step" data-us-step="1">
+                <div class="us-scratch-card">
+                  <div class="us-reveal-card us-reveal-two">
+                    <div class="us-photo-grid">
+                      <img src="images/web/simply-us-4.jpg" alt="Emma smiling in a field of flowers" />
+                      <img src="images/web/simply-us-5.jpg" alt="Pritesh and Emma in a close selfie together" />
+                      <img class="us-landscape" src="images/web/simply-us-6.jpg" alt="Pritesh and Emma making faces beside a waterfall" />
+                    </div>
+                    <p>Every flower, every hug, every wild face.</p>
+                  </div>
+                  <canvas class="us-scratch-canvas" aria-label="Scratch to uncover photos four through six"></canvas>
+                </div>
+                <div class="us-scratch-footer">
+                  <span>Scratch to uncover 4–6</span>
+                  <button class="text-button us-next" type="button" data-us-next="2" hidden>One more <span>→</span></button>
+                </div>
+              </section>
+
+              <section class="us-scratch-step" data-us-step="2">
+                <div class="us-scratch-card">
+                  <div class="us-reveal-card us-reveal-three">
+                    <div class="us-photo-grid">
+                      <img src="images/web/simply-us-7.jpg" alt="Emma adventuring on a forest trail" />
+                      <img src="images/web/simply-us-8.jpg" alt="Emma climbing a rock by the sea" />
+                      <img src="images/web/simply-us-9.jpg" alt="Pritesh and Emma smiling in a playful selfie" />
+                    </div>
+                    <p>Every climb, every adventure, every version of us.</p>
+                  </div>
+                  <canvas class="us-scratch-canvas" aria-label="Scratch to uncover photos seven through nine"></canvas>
+                </div>
+                <div class="us-scratch-footer">
+                  <span>Scratch to uncover 7–9</span>
+                  <button class="text-button us-next" type="button" data-us-next="3" hidden>The last one <span>→</span></button>
+                </div>
+              </section>
+
+              <section class="us-scratch-step" data-us-step="3">
+                <div class="us-scratch-card us-solo-card">
+                  <div class="us-reveal-card us-reveal-final">
+                    <img src="images/web/simply-us-10.jpg" alt="A warm smiling moment together at home" />
+                    <div>
+                      <span>10 / 10</span>
+                      <strong>hehaawwww</strong>
+                    </div>
+                  </div>
+                  <canvas class="us-scratch-canvas" aria-label="Scratch to uncover the final standalone photo"></canvas>
+                </div>
+                <div class="us-scratch-footer">
+                  <span>One final scratch</span>
+                  <button class="primary-button" id="us-finish" type="button" hidden>
+                    <span>That’s simply us</span>
+                    <span class="button-arrow" aria-hidden="true">♥</span>
+                  </button>
+                </div>
+              </section>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="scene" id="scratch" data-step="3" aria-labelledby="scratch-title">
+        <div class="scene-heading centered">
+          <p class="eyebrow">Chapter two</p>
+          <h2 id="scratch-title">Some things are<br />worth uncovering.</h2>
+          <p>Use your finger to scratch the card.</p>
+        </div>
+
+        <div class="scratch-wrap" id="scratch-wrap">
+          <div class="secret-card">
+            <span class="secret-kicker">The truth is...</span>
+            <strong data-secret-message>You make ordinary days feel magical.</strong>
+            <span class="secret-signoff" data-your-name>— Pritesh</span>
+          </div>
+          <canvas id="scratch-canvas" aria-label="Scratch here to reveal a hidden message"></canvas>
+          <span class="scratch-hand" aria-hidden="true">↝</span>
+        </div>
+
+        <div class="scratch-progress" aria-live="polite">
+          <span id="scratch-percent">0% revealed</span>
+          <button class="text-button hidden" id="scratch-next" data-go="quiz">
+            Keep going <span>→</span>
+          </button>
+        </div>
+      </section>
+
+      <section class="scene" id="quiz" data-step="4" aria-labelledby="quiz-title">
+        <div class="quiz-layout">
+          <div class="scene-heading">
+            <p class="eyebrow">One last thing</p>
+            <h2 id="quiz-title">A very serious<br />compatibility test.</h2>
+            <p>There are no wrong answers. Probably.</p>
+          </div>
+
+          <div class="quiz-card" id="quiz-card">
+            <div class="quiz-topline">
+              <span id="quiz-count">Question 1 of 3</span>
+              <span class="tiny-hearts" aria-hidden="true">♥ ♥ ♥</span>
+            </div>
+            <h3 id="quiz-question">What makes the best kind of date?</h3>
+            <div class="answers" id="quiz-answers"></div>
+          </div>
+        </div>
+      </section>
+
+      <section class="scene" id="hold" data-step="5" aria-labelledby="hold-title">
+        <div class="hold-content">
+          <p class="eyebrow">The final chapter</p>
+          <h2 id="hold-title">Okay. Ready?</h2>
+          <p>Press and hold the heart to unlock my question.</p>
+
+          <button class="hold-button" id="hold-button" aria-label="Press and hold to unlock">
+            <svg class="hold-ring" viewBox="0 0 120 120" aria-hidden="true">
+              <circle class="ring-bg" cx="60" cy="60" r="54"></circle>
+              <circle class="ring-progress" cx="60" cy="60" r="54"></circle>
+            </svg>
+            <span class="hold-heart">♥</span>
+          </button>
+          <span class="hold-label" id="hold-label">hold me</span>
+        </div>
+      </section>
+
+      <section class="scene final-scene" id="final" data-step="5" aria-labelledby="final-title">
+        <div class="confetti" id="confetti" aria-hidden="true"></div>
+        <div class="final-content">
+          <p class="eyebrow">So, <span data-her-name>Emma</span>...</p>
+          <h2 id="final-title" data-final-question>
+            Will you be my travel companion and let’s explore more things together?
+          </h2>
+          <p data-final-note>I promise snacks, bad jokes, and a whole lot of love.</p>
+          <div class="final-actions" id="final-actions">
+            <button class="primary-button yes-button" id="yes-button">
+              Yes, obviously <span aria-hidden="true">♥</span>
+            </button>
+            <button class="soft-button" id="also-yes-button">Also yes</button>
+          </div>
+          <div class="yes-message" id="yes-message" role="status">
+            <span class="big-heart" aria-hidden="true">♥</span>
+            <strong data-success-message>Best answer ever.</strong>
+            <p>Screenshot this and send it to me ✨</p>
+          </div>
+        </div>
+        <footer>Made with love by <span data-your-name>Pritesh</span></footer>
+      </section>
+    </main>
+
+    <noscript>This little adventure needs JavaScript enabled to work.</noscript>
+    <script src="config.js"></script>
+    <script src="script.js"></script>
+  </body>
+</html>
