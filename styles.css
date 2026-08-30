@@ -1485,7 +1485,8 @@ h1 em::after {
   gap: clamp(8px, 1.5vw, 17px);
 }
 
-.us-photo-grid img {
+.us-photo-grid > img,
+.us-photo-with-caption img {
   width: 100%;
   height: 100%;
   min-width: 0;
@@ -1495,8 +1496,24 @@ h1 em::after {
   box-shadow: 0 10px 24px rgba(41, 37, 34, 0.15);
 }
 
-.us-photo-grid img:first-child { transform: rotate(-1.5deg); }
-.us-photo-grid img:last-child { transform: rotate(1.5deg); }
+.us-photo-with-caption {
+  display: grid;
+  grid-template-rows: minmax(0, 1fr) auto;
+  gap: 7px;
+  min-width: 0;
+  height: 100%;
+  margin: 0;
+}
+
+.us-photo-with-caption figcaption {
+  font-family: "Comic Sans MS", "Bradley Hand", cursive;
+  font-size: clamp(11px, 1.5vw, 15px);
+  line-height: 1.1;
+  text-align: center;
+}
+
+.us-photo-grid > :first-child { transform: rotate(-1.5deg); }
+.us-photo-grid > :last-child { transform: rotate(1.5deg); }
 .us-photo-grid img.us-landscape { object-fit: contain; }
 
 .us-reveal-card > p {
