@@ -1962,6 +1962,21 @@ h1 em::after {
   font-size: clamp(25px, 5vw, 42px);
 }
 
+.success-cat {
+  width: clamp(88px, 21vw, 126px);
+  max-height: 112px;
+  margin-top: 8px;
+  object-fit: contain;
+  filter: drop-shadow(0 9px 12px rgba(91, 31, 27, 0.2));
+  animation: catCelebration 0.8s var(--ease) both;
+}
+
+@keyframes catCelebration {
+  from { opacity: 0; transform: translateY(18px) scale(0.7); }
+  60% { transform: translateY(-5px) scale(1.08); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+
 .thread-stage.complete .thread-letter,
 .thread-stage.complete .thread-pull { opacity: 0; transform: translate(-50%, -50%) scale(0.4); pointer-events: none; }
 .thread-stage.complete .love-thread { opacity: 0; transition: opacity 0.35s ease; }
