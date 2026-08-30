@@ -31,6 +31,10 @@
     const nextScene = document.getElementById(sceneId);
     if (!nextScene) return;
 
+    if (currentScene === "word-game" && sceneId !== "word-game") {
+      document.getElementById("monkey-laugh-video")?.pause();
+    }
+
     oldScene.classList.add("leaving");
     oldScene.classList.remove("active");
     window.setTimeout(() => oldScene.classList.remove("leaving"), 600);
@@ -38,8 +42,8 @@
     currentScene = sceneId;
 
     const step = Number(nextScene.dataset.step || 1);
-    progressLabel.textContent = `${String(step).padStart(2, "0")} / 05`;
-    progressFill.style.width = `${step * 20}%`;
+    progressLabel.textContent = `${String(step).padStart(2, "0")} / 07`;
+    progressFill.style.width = `${(step / 7) * 100}%`;
 
     if (sceneId === "scratch") window.setTimeout(setupScratchCard, 80);
     if (sceneId === "quiz") renderQuestion();
@@ -552,6 +556,227 @@
   });
   scratchCanvas.addEventListener("pointercancel", () => { scratching = false; });
 
+  // Crack the code: three Wordle rounds
+  const wordRounds = config.wordGame?.rounds || [
+    { answer: "GREEN", clue: "What colour has your heart claimed as its favourite?" },
+    { answer: "TINKY", clue: "What secret little name have I saved for you?", lateHint: "It starts with T." },
+    { answer: "MONKEY", clue: "Which animal do I associate with your cutest chaotic energy?" },
+  ];
+  const wordGameCard = document.getElementById("word-game-card");
+  const wordBoard = document.getElementById("word-board");
+  const wordKeyboard = document.getElementById("word-keyboard");
+  const wordMessage = document.getElementById("word-message");
+  const wordHint = document.getElementById("word-hint");
+  const wordRoundLabel = document.getElementById("word-round");
+  const wordRoundDots = document.getElementById("word-round-dots");
+  const wordNext = document.getElementById("word-next");
+  const wordNextLabel = document.getElementById("word-next-label");
+  const monkeyReward = document.getElementById("monkey-reward");
+  const monkeyLaughVideo = document.getElementById("monkey-laugh-video");
+  let wordRoundIndex = 0;
+  let wordRow = 0;
+  let wordGuess = "";
+  let wordLocked = false;
+  let wordFinished = false;
+
+  const keyboardRows = ["QWERTYUIOP", "ASDFGHJKL", ["ENTER", ..."ZXCVBNM", "BACK"]];
+  keyboardRows.forEach((keys) => {
+    const row = document.createElement("div");
+    row.className = "word-key-row";
+    [...keys].forEach((key) => {
+      const button = document.createElement("button");
+      button.className = `word-key${key.length > 1 ? " wide" : ""}`;
+      button.type = "button";
+      button.dataset.key = key;
+      button.textContent = key === "BACK" ? "⌫" : key;
+      button.setAttribute("aria-label", key === "BACK" ? "Backspace" : key);
+      button.addEventListener("click", () => handleWordKey(key));
+      row.appendChild(button);
+    });
+    wordKeyboard.appendChild(row);
+  });
+
+  function currentWordRound() {
+    return wordRounds[wordRoundIndex];
+  }
+
+  function renderWordRound() {
+    const round = currentWordRound();
+    const answer = round.answer.toUpperCase();
+    wordRow = 0;
+    wordGuess = "";
+    wordLocked = false;
+    wordFinished = false;
+    wordBoard.replaceChildren();
+    wordBoard.style.setProperty("--word-length", answer.length);
+    for (let index = 0; index < answer.length * 6; index += 1) {
+      const tile = document.createElement("span");
+      tile.className = "word-tile";
+      tile.setAttribute("aria-hidden", "true");
+      wordBoard.appendChild(tile);
+    }
+    wordKeyboard.querySelectorAll(".word-key").forEach((key) => {
+      key.classList.remove("correct", "present", "absent");
+      key.disabled = false;
+    });
+    wordRoundLabel.textContent = `Code ${wordRoundIndex + 1} of ${wordRounds.length}`;
+    wordRoundDots.textContent = wordRounds
+      .map((_, index) => index <= wordRoundIndex ? "●" : "○")
+      .join(" ");
+    wordHint.textContent = round.clue;
+    wordMessage.textContent = "Tap the letters to make your first guess.";
+    wordNext.hidden = true;
+    wordNextLabel.textContent = wordRoundIndex === wordRounds.length - 1
+      ? "Continue our adventure"
+      : "Next little mystery";
+    monkeyReward.hidden = true;
+    wordGameCard.classList.remove("showing-reward");
+    monkeyLaughVideo.pause();
+    monkeyLaughVideo.currentTime = 0;
+  }
+
+  function paintWordGuess() {
+    const answerLength = currentWordRound().answer.length;
+    const rowStart = wordRow * answerLength;
+    for (let index = 0; index < answerLength; index += 1) {
+      const tile = wordBoard.children[rowStart + index];
+      tile.textContent = wordGuess[index] || "";
+      tile.classList.toggle("filled", index < wordGuess.length);
+    }
+  }
+
+  function keyboardStatus(letter, status) {
+    const key = wordKeyboard.querySelector(`[data-key="${letter}"]`);
+    if (!key || key.classList.contains("correct")) return;
+    if (status === "correct" || !key.classList.contains("present")) {
+      key.classList.remove("present", "absent");
+      key.classList.add(status);
+    }
+  }
+
+  function scoreWordGuess(guess, answer) {
+    const statuses = Array(answer.length).fill("absent");
+    const remaining = {};
+    [...answer].forEach((letter, index) => {
+      if (guess[index] === letter) statuses[index] = "correct";
+      else remaining[letter] = (remaining[letter] || 0) + 1;
+    });
+    [...guess].forEach((letter, index) => {
+      if (statuses[index] === "correct") return;
+      if (remaining[letter] > 0) {
+        statuses[index] = "present";
+        remaining[letter] -= 1;
+      }
+    });
+    return statuses;
+  }
+
+  function submitWordGuess() {
+    const round = currentWordRound();
+    const answer = round.answer.toUpperCase();
+    if (wordGuess.length < answer.length) {
+      wordMessage.textContent = `${answer.length} letters, detective!`;
+      wordBoard.classList.remove("nudge");
+      void wordBoard.offsetWidth;
+      wordBoard.classList.add("nudge");
+      return;
+    }
+
+    wordLocked = true;
+    const statuses = scoreWordGuess(wordGuess, answer);
+    const rowStart = wordRow * answer.length;
+    statuses.forEach((status, index) => {
+      const tile = wordBoard.children[rowStart + index];
+      tile.classList.remove("filled");
+      tile.classList.add("reveal", status);
+      tile.style.setProperty("--tile-delay", `${index * 75}ms`);
+      keyboardStatus(wordGuess[index], status);
+    });
+
+    const solved = wordGuess === answer;
+    if (solved && answer === "MONKEY") {
+      const playback = monkeyLaughVideo.play();
+      playback?.catch(() => {
+        wordMessage.textContent = "Correct! Tap play to hear your monkey representative laugh. 😂";
+      });
+    }
+    window.setTimeout(() => {
+      if (solved) {
+        wordFinished = true;
+        wordMessage.textContent = round.solved || `Correct—it was ${answer}! ♥`;
+        wordHint.textContent = wordRoundIndex === wordRounds.length - 1
+          ? "Case closed: cutest little monkey confirmed."
+          : "Code cracked. My clever honey wins this round.";
+        wordKeyboard.querySelectorAll("button").forEach((key) => { key.disabled = true; });
+        if (answer === "MONKEY") {
+          monkeyReward.hidden = false;
+          wordGameCard.classList.add("showing-reward");
+        }
+        wordNext.hidden = false;
+        navigator.vibrate?.([30, 40, 70]);
+        return;
+      }
+
+      wordRow += 1;
+      wordGuess = "";
+      if (wordRow >= 6) {
+        wordFinished = true;
+        wordMessage.textContent = `The code was ${answer}. You still win—honey rules. ♥`;
+        wordHint.textContent = wordRoundIndex === 1
+          ? "Tinky: my tiny name for the person with the biggest place in my heart."
+          : `Mystery solved: ${answer}.`;
+        wordNext.hidden = false;
+        return;
+      }
+      wordLocked = false;
+      wordMessage.textContent = wordRow < 3
+        ? "Cute guess. Try again!"
+        : "Summon the couple telepathy—you’ve got this.";
+      if (wordRoundIndex === 1 && wordRow >= 3 && round.lateHint) {
+        wordHint.textContent = round.lateHint;
+      }
+    }, 650);
+  }
+
+  function handleWordKey(key) {
+    if (wordLocked || wordFinished) return;
+    if (key === "ENTER") {
+      submitWordGuess();
+      return;
+    }
+    if (key === "BACK") {
+      wordGuess = wordGuess.slice(0, -1);
+      paintWordGuess();
+      return;
+    }
+    if (/^[A-Z]$/.test(key) && wordGuess.length < currentWordRound().answer.length) {
+      wordGuess += key;
+      paintWordGuess();
+    }
+  }
+
+  wordNext.addEventListener("click", () => {
+    if (wordRoundIndex < wordRounds.length - 1) {
+      wordRoundIndex += 1;
+      renderWordRound();
+      return;
+    }
+    monkeyLaughVideo.pause();
+    goTo("quiz");
+  });
+
+  renderWordRound();
+
+  document.addEventListener("keydown", (event) => {
+    if (currentScene !== "word-game") return;
+    if (event.key === "Enter" || event.key === "Backspace" || /^[a-zA-Z]$/.test(event.key)) {
+      event.preventDefault();
+    }
+    if (event.key === "Enter") handleWordKey("ENTER");
+    else if (event.key === "Backspace") handleWordKey("BACK");
+    else if (/^[a-zA-Z]$/.test(event.key)) handleWordKey(event.key.toUpperCase());
+  });
+
   // Quiz
   let questionIndex = 0;
   const quizCard = document.getElementById("quiz-card");
@@ -577,7 +802,7 @@
   function chooseAnswer() {
     if (quizCard.classList.contains("switching")) return;
     if (questionIndex === config.questions.length - 1) {
-      goTo("hold");
+      goTo("pack-game");
       return;
     }
     quizCard.classList.add("switching");
@@ -587,6 +812,69 @@
     }, 190);
     window.setTimeout(() => quizCard.classList.remove("switching"), 430);
   }
+
+  // Pack our adventure bag
+  const packItems = document.getElementById("pack-items");
+  const packedItems = document.getElementById("packed-items");
+  const suitcase = document.getElementById("suitcase");
+  const packCount = document.getElementById("pack-count");
+  const packStatus = document.getElementById("pack-status");
+  const packNext = document.getElementById("pack-next");
+  let packedCount = 0;
+  let packingComplete = false;
+  const packReactions = {
+    "pack-passports": "Responsible choice. Suspiciously responsible.",
+    "pack-snacks": "The most important travel document: snacks.",
+    "pack-camera": "For evidence that we actually went outside.",
+    "pack-cuddles": "Excellent. These fit in every overhead compartment.",
+    "pack-kiwi": "Kiwi has been promoted to breakfast supervisor. Muaaahh!",
+    "pack-socks": "Forty-seven socks and somehow none of them match.",
+  };
+
+  function packItem(item) {
+    if (!item || item.classList.contains("packed") || packingComplete) return;
+    item.classList.add("packed");
+    item.draggable = false;
+    packedItems.appendChild(item);
+    packedCount += 1;
+    packCount.textContent = `${packedCount} / 4 essentials packed`;
+    packStatus.textContent = packReactions[item.id];
+    navigator.vibrate?.(25);
+
+    if (packedCount === 4) {
+      packingComplete = true;
+      suitcase.classList.add("complete");
+      packStatus.textContent = "Perfectly packed. Questionable choices, excellent adventure. ♥";
+      packNext.hidden = false;
+      packItems.querySelectorAll(".pack-item").forEach((remaining) => {
+        remaining.disabled = true;
+        remaining.draggable = false;
+      });
+      navigator.vibrate?.([30, 40, 60]);
+    }
+  }
+
+  document.querySelectorAll(".pack-item").forEach((item) => {
+    item.addEventListener("click", () => packItem(item));
+    item.addEventListener("dragstart", (event) => {
+      event.dataTransfer.setData("text/plain", item.id);
+      event.dataTransfer.effectAllowed = "move";
+      suitcase.classList.add("drag-over");
+    });
+    item.addEventListener("dragend", () => suitcase.classList.remove("drag-over"));
+  });
+
+  suitcase.addEventListener("dragover", (event) => {
+    event.preventDefault();
+    event.dataTransfer.dropEffect = "move";
+    suitcase.classList.add("drag-over");
+  });
+  suitcase.addEventListener("dragleave", () => suitcase.classList.remove("drag-over"));
+  suitcase.addEventListener("drop", (event) => {
+    event.preventDefault();
+    suitcase.classList.remove("drag-over");
+    packItem(document.getElementById(event.dataTransfer.getData("text/plain")));
+  });
 
   // Hold to unlock
   const holdButton = document.getElementById("hold-button");

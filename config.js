@@ -43,6 +43,27 @@ window.LOVE_STORY = {
 
   secretMessage: "You make ordinary days feel magical.",
 
+  wordGame: {
+    rounds: [
+      {
+        answer: "GREEN",
+        clue: "What colour has your heart claimed as its favourite?",
+        solved: "Green! I knew you would make this one look easy. 💚",
+      },
+      {
+        answer: "TINKY",
+        clue: "What secret little name have I saved for you?",
+        lateHint: "Emergency hint unlocked: it starts with T… because watching you investigate is adorable.",
+        solved: "Tinky! The tiny name for the person who takes up the biggest space in my heart. ♥",
+      },
+      {
+        answer: "MONKEY",
+        clue: "Which animal do I lovingly associate with your cutest chaotic energy?",
+        solved: "Monkey! Correct—and now your official representative would like to laugh.",
+      },
+    ],
+  },
+
   questions: [
     {
       question: "What makes the best kind of date?",

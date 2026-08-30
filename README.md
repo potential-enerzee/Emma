@@ -1,6 +1,6 @@
 # An interactive love story
 
-A playful, mobile-friendly romantic reveal built with plain HTML, CSS, and JavaScript. It opens with an animated hand-catching moment and an “uppies” video, followed by swipeable cards, a scratch-to-reveal message, a mini quiz, a press-and-hold unlock, and a final celebration.
+A playful, mobile-friendly romantic reveal built with plain HTML, CSS, and JavaScript. It opens with an animated hand-catching moment and an “uppies” video, followed by swipeable cards, nested photo scratches, a secret reveal, three rounds of “Crack the code, 🍯”, a mini quiz, an adventure-bag packing game, a press-and-hold unlock, and a final celebration.
 
 ## Make it yours
 
@@ -10,6 +10,7 @@ Open `config.js` and change:
 - the opening message shown before and after she catches your hand
 - the four reasons/memories
 - the hidden scratch-card message
+- the three “Crack the code” answers, clues, and delayed hint
 - the quiz questions and answers
 - the final question and success message
 
@@ -28,7 +29,7 @@ Then visit <http://localhost:8000>.
 ## Publish with GitHub Pages
 
 1. Create a new repository on GitHub.
-2. Upload all five files in this folder to the repository's main branch.
+2. Upload the web files and optimized media in this folder to the repository's main branch.
 3. In the repository, go to **Settings → Pages**.
 4. Under **Build and deployment**, choose **Deploy from a branch**.
 5. Select the `main` branch and `/ (root)`, then click **Save**.
@@ -40,10 +41,12 @@ GitHub will show the public link after a minute or two. Because the site has no 
 - `index.html` — page structure
 - `styles.css` — layout, colors, and animation
 - `config.js` — all personal text
-- `script.js` — swipe, scratch, quiz, hold, and celebration behavior
+- `script.js` — swipe, scratch, Wordle, packing, quiz, hold, and celebration behavior
+- `cat-dancing-cat.gif` — dancing celebration shown after P and E come together
 - `videos/uppies.mp4` — browser-ready video shown after the opening catch
 - `videos/potential-energy.mp4` — browser-ready video in the “Potential Energy” memory
 - `videos/energy-action.mp4` — muted looping “energy in motion” video
+- `monkey-laught.mp4` — looping monkey-laugh reward after the final word is guessed
 - `images/web/` — metadata-free, optimized photos used in the “Our laugh” memory
 - `images/web/little-things-*.jpg` — optimized photos used in “The little things” reel
 - `images/web/simply-us-*.jpg` — ten optimized photos used across the four nested scratch reveals

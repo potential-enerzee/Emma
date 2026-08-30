@@ -23,7 +23,7 @@
           <span>for you</span>
         </a>
         <div class="chapter-progress" aria-label="Journey progress">
-          <span class="progress-label">01 / 05</span>
+          <span class="progress-label">01 / 07</span>
           <div class="progress-track"><span class="progress-fill"></span></div>
         </div>
       </header>
@@ -385,13 +385,45 @@
 
         <div class="scratch-progress" aria-live="polite">
           <span id="scratch-percent">0% revealed</span>
-          <button class="text-button hidden" id="scratch-next" data-go="quiz">
+          <button class="text-button hidden" id="scratch-next" data-go="word-game">
             Keep going <span>→</span>
           </button>
         </div>
       </section>
 
-      <section class="scene" id="quiz" data-step="4" aria-labelledby="quiz-title">
+      <section class="scene" id="word-game" data-step="4" aria-labelledby="word-game-title">
+        <div class="word-layout">
+          <div class="scene-heading">
+            <p class="eyebrow">Three tiny mysteries</p>
+            <h2 id="word-game-title">Crack the code, <span class="title-emoji" aria-label="honey">🍯</span></h2>
+            <p>Three words, six guesses each, and one very suspiciously cute detective.</p>
+          </div>
+
+          <div class="word-game-card" id="word-game-card">
+            <div class="word-topline">
+              <span id="word-round">Code 1 of 3</span>
+              <span class="word-round-dots" id="word-round-dots" aria-hidden="true">● ○ ○</span>
+            </div>
+            <p class="word-hint" id="word-hint">What colour has your heart claimed as its favourite?</p>
+            <div class="word-board" id="word-board" aria-label="Six-row word guessing board"></div>
+            <p class="word-message" id="word-message" aria-live="polite">Tap the letters to make your first guess.</p>
+            <div class="word-keyboard" id="word-keyboard" aria-label="Letter keyboard"></div>
+            <div class="monkey-reward" id="monkey-reward" hidden>
+              <video id="monkey-laugh-video" playsinline loop controls preload="metadata">
+                <source src="monkey-laught.mp4" type="video/mp4" />
+                Your browser does not support this video.
+              </video>
+              <p>My favourite little monkey has identified herself. 😂</p>
+            </div>
+            <button class="primary-button word-next" id="word-next" type="button" hidden>
+              <span id="word-next-label">Next little mystery</span>
+              <span class="button-arrow" aria-hidden="true">→</span>
+            </button>
+          </div>
+        </div>
+      </section>
+
+      <section class="scene" id="quiz" data-step="5" aria-labelledby="quiz-title">
         <div class="quiz-layout">
           <div class="scene-heading">
             <p class="eyebrow">One last thing</p>
@@ -410,7 +442,51 @@
         </div>
       </section>
 
-      <section class="scene" id="hold" data-step="5" aria-labelledby="hold-title">
+      <section class="scene" id="pack-game" data-step="6" aria-labelledby="pack-title">
+        <div class="pack-layout">
+          <div class="scene-heading">
+            <p class="eyebrow">Bonus game two</p>
+            <h2 id="pack-title">Pack our<br />adventure bag.</h2>
+            <p>Drag or tap four essentials. Choose wisely. Or don’t.</p>
+          </div>
+
+          <div class="pack-card">
+            <div class="pack-items" id="pack-items" aria-label="Things available to pack">
+              <button class="pack-item" id="pack-passports" type="button" draggable="true" data-label="Passports">
+                <span aria-hidden="true">🛂</span><small>Passports</small>
+              </button>
+              <button class="pack-item" id="pack-snacks" type="button" draggable="true" data-label="Emergency snacks">
+                <span aria-hidden="true">🍪</span><small>Emergency snacks</small>
+              </button>
+              <button class="pack-item" id="pack-camera" type="button" draggable="true" data-label="Camera">
+                <span aria-hidden="true">📸</span><small>Camera</small>
+              </button>
+              <button class="pack-item" id="pack-cuddles" type="button" draggable="true" data-label="Emergency cuddles">
+                <span aria-hidden="true">🫂</span><small>Emergency cuddles</small>
+              </button>
+              <button class="pack-item" id="pack-kiwi" type="button" draggable="true" data-label="Kiwi, breakfast supervisor">
+                <span aria-hidden="true">🐄</span><small>Kiwi</small>
+              </button>
+              <button class="pack-item" id="pack-socks" type="button" draggable="true" data-label="Forty-seven socks">
+                <span aria-hidden="true">🧦</span><small>47 socks</small>
+              </button>
+            </div>
+
+            <div class="suitcase" id="suitcase" aria-label="Drop four travel essentials here">
+              <span class="suitcase-label">Our bag</span>
+              <div class="packed-items" id="packed-items"></div>
+              <span class="pack-count" id="pack-count">0 / 4 essentials packed</span>
+            </div>
+            <p class="pack-status" id="pack-status" aria-live="polite">The bag is waiting for your questionable decisions.</p>
+            <button class="primary-button pack-next" id="pack-next" type="button" data-go="hold" hidden>
+              <span>Bag packed—let’s go!</span>
+              <span class="button-arrow" aria-hidden="true">↗</span>
+            </button>
+          </div>
+        </div>
+      </section>
+
+      <section class="scene" id="hold" data-step="7" aria-labelledby="hold-title">
         <div class="hold-content">
           <p class="eyebrow">The final chapter</p>
           <h2 id="hold-title">Okay. Ready?</h2>
@@ -427,7 +503,7 @@
         </div>
       </section>
 
-      <section class="scene final-scene" id="final" data-step="5" aria-labelledby="final-title">
+      <section class="scene final-scene" id="final" data-step="7" aria-labelledby="final-title">
         <div class="confetti" id="confetti" aria-hidden="true"></div>
         <div class="final-content">
           <p class="eyebrow">So, <span data-her-name>Emma</span>...</p>
