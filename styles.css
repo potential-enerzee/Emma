@@ -1498,7 +1498,7 @@ h1 em::after {
 
 .us-photo-with-caption {
   display: grid;
-  grid-template-rows: minmax(0, 1fr) auto;
+  grid-template-rows: minmax(0, 1fr) 40px;
   gap: 7px;
   min-width: 0;
   height: 100%;
@@ -1507,8 +1507,10 @@ h1 em::after {
 
 .us-photo-with-caption figcaption {
   display: grid;
-  min-height: 34px;
+  width: 100%;
+  height: 40px;
   place-items: center;
+  align-self: end;
   font-family: "Comic Sans MS", "Bradley Hand", cursive;
   font-size: clamp(11px, 1.5vw, 15px);
   line-height: 1.1;
@@ -1518,8 +1520,10 @@ h1 em::after {
 .us-reveal-one .us-photo-grid,
 .us-reveal-three .us-photo-grid { height: 100%; }
 
-.us-photo-grid > :first-child { transform: rotate(-1.5deg); }
-.us-photo-grid > :last-child { transform: rotate(1.5deg); }
+.us-photo-grid > img:first-child,
+.us-photo-with-caption:first-child img { transform: rotate(-1.5deg); }
+.us-photo-grid > img:last-child,
+.us-photo-with-caption:last-child img { transform: rotate(1.5deg); }
 .us-photo-grid img.us-landscape { object-fit: contain; }
 
 .us-reveal-card > p {
@@ -2361,7 +2365,7 @@ footer {
   inset: 0;
   width: 100%;
   height: 100%;
-  opacity: 0.54;
+  opacity: 0.62;
   background-position: center;
   background-size: cover;
   filter: saturate(0.88) contrast(0.92);
@@ -2372,7 +2376,7 @@ footer {
   z-index: -1;
   inset: 0;
   content: "";
-  background: linear-gradient(90deg, rgba(255,250,246,0.98) 0%, rgba(255,250,246,0.93) 54%, rgba(255,250,246,0.68) 100%);
+  background: linear-gradient(90deg, rgba(255,250,246,0.96) 0%, rgba(255,250,246,0.9) 54%, rgba(255,250,246,0.58) 100%);
   pointer-events: none;
 }
 
@@ -2385,7 +2389,7 @@ footer {
 .theme-gardens::after { background-image: url("images/story/07-flower-gardens.jpg"); }
 .theme-bowling::after { background-image: url("images/story/08-bowling.jpg"); }
 .theme-cooking::after { background-image: url("images/story/09-cooking-together-animated.jpg"); }
-.theme-himym::after { width: 100%; opacity: 0.54; background-image: url("images/story/10-yellow-umbrella.jpg"); }
+.theme-himym::after { width: 100%; opacity: 0.62; background-image: url("images/story/10-yellow-umbrella.jpg"); }
 
 @keyframes storyPageIn {
   from { opacity: 0; transform: translateX(22px); }
@@ -2905,9 +2909,9 @@ noscript {
   .story-shell { padding: 8px; border-radius: 20px; }
   .story-header { padding: 5px 8px 9px; }
   .story-page { padding: 24px 17px; border-radius: 16px; }
-  .story-page[class*="theme-"]::after { opacity: 0.5; background-position: center bottom; }
+  .story-page[class*="theme-"]::after { opacity: 0.58; background-position: center bottom; }
   .story-page[class*="theme-"]::before {
-    background: linear-gradient(180deg, rgba(255,250,246,0.98) 0%, rgba(255,250,246,0.94) 60%, rgba(255,250,246,0.65) 100%);
+    background: linear-gradient(180deg, rgba(255,250,246,0.96) 0%, rgba(255,250,246,0.91) 60%, rgba(255,250,246,0.6) 100%);
   }
   .story-page h2 { font-size: clamp(34px, 10vw, 47px); }
   .story-copy { margin-top: 17px; }
