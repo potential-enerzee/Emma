@@ -2601,10 +2601,20 @@ footer {
   line-height: 1;
 }
 .story-final-reveal > p:not(.reveal-kicker) {
-  margin: 12px 0 20px;
+  margin: 12px 0 2px;
   color: #514945;
   font-family: Georgia, serif;
   font-size: clamp(16px, 2vw, 20px);
+}
+.secret-whisper {
+  display: block;
+  margin: 0 auto 17px;
+  color: rgba(81, 73, 69, 0.48);
+  font-family: Georgia, serif;
+  font-size: 3px;
+  font-style: italic;
+  letter-spacing: 0.02em;
+  line-height: 1.35;
 }
 
 .himym-keepsakes {
