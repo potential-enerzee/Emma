@@ -5,6 +5,7 @@
   const scenes = [...document.querySelectorAll(".scene")];
   const progressLabel = document.querySelector(".progress-label");
   const progressFill = document.querySelector(".progress-fill");
+  const jumpEnding = document.getElementById("jump-ending");
   let currentScene = "welcome";
 
   function fillPersonalText() {
@@ -47,6 +48,7 @@
     const step = Number(nextScene.dataset.step || 1);
     progressLabel.textContent = `${String(step).padStart(2, "0")} / 05`;
     progressFill.style.width = `${(step / 5) * 100}%`;
+    jumpEnding.hidden = sceneId === "final";
 
     if (sceneId === "scratch") window.setTimeout(setupScratchCard, 80);
     nextScene.querySelector("h1, h2")?.focus({ preventScroll: true });
@@ -874,6 +876,10 @@
 
   storyBack.addEventListener("click", () => showStoryPage(storyIndex - 1));
   storyNext.addEventListener("click", () => showStoryPage(storyIndex + 1));
+  jumpEnding.addEventListener("click", () => {
+    goTo("final");
+    showStoryPage(storyPages.length - 1);
+  });
 
   document.addEventListener("keydown", (event) => {
     if (currentScene !== "final") return;
