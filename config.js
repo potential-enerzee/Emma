@@ -52,14 +52,14 @@ window.LOVE_STORY = {
       },
       {
         answer: "TINKY",
-        clue: "What alternative name have I saved you under in my contacts—the one only we know?",
+        clue: "What alternative name have I saved you under in my contacts that only we know?",
         lateHint: "Emergency hint unlocked: it starts with T… because watching you investigate is adorable.",
         solved: "Tinky! The tiny name for the person who takes up the biggest space in my heart. ♥",
       },
       {
         answer: "MONKEY",
         clue: "Which animal do I lovingly associate with your cutest chaotic energy?",
-        solved: "Monkey! Correct—and now your official representative would like to laugh.",
+        solved: "Monkey! Correct. Now your official representative would like to laugh.",
       },
     ],
   },

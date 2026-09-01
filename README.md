@@ -1,6 +1,6 @@
 # An interactive love story
 
-A playful, mobile-friendly romantic journey built with plain HTML, CSS, and JavaScript. It opens with an animated hand-catching moment and an “uppies” video, followed by swipeable cards, nested photo scratches, a secret reveal, three rounds of “Crack the code, 🍯”, and a press-and-hold unlock leading into a ten-part reflective storyboard. The ending brings back the pullable P + E thread and reveals a playful answer with How I Met Your Mother keepsakes.
+A playful, mobile-friendly romantic journey built with plain HTML, CSS, and JavaScript. It opens with an animated hand-catching moment and an “uppies” video, followed by swipeable cards, nested photo scratches, a secret reveal, three rounds of “Crack the code, 🍯”, and a press-and-hold unlock leading into a reflective storyboard with ten chapters. The ending brings back the pullable P + E thread and reveals a playful answer with How I Met Your Mother keepsakes.
 
 ## Make it yours
 
@@ -37,18 +37,18 @@ GitHub will show the public link after a minute or two. Because the site has no 
 
 ## Files
 
-- `index.html` — page structure
-- `styles.css` — layout, colors, and animation
-- `config.js` — all personal text
-- `script.js` — swipe, scratch, Wordle, hold, and storyboard interactions
-- `videos/uppies.mp4` — browser-ready video shown after the opening catch
-- `videos/potential-energy.mp4` — browser-ready video in the “Potential Energy” memory
-- `videos/energy-action.mp4` — muted looping “energy in motion” video
-- `monkey-laught.mp4` — looping monkey-laugh reward after the final word is guessed
-- `images/web/` — metadata-free, optimized photos used in the “Our laugh” memory
-- `images/web/little-things-*.jpg` — optimized photos used in “The little things” reel
-- `images/web/simply-us-*.jpg` — ten optimized photos used across the four nested scratch reveals
-- `images/story/` — locally stored photographs used as the ten subtle storyboard backgrounds
-- `credits.html` — photographer and license credits for the storyboard backgrounds
+- `index.html`: page structure
+- `styles.css`: layout, colors, and animation
+- `config.js`: all personal text
+- `script.js`: swipe, scratch, Wordle, hold, and storyboard interactions
+- `videos/uppies.mp4`: browser-ready video shown after the opening catch
+- `videos/potential-energy.mp4`: browser-ready video in the “Potential Energy” memory
+- `videos/energy-action.mp4`: muted looping “energy in motion” video
+- `monkey-laught.mp4`: looping monkey-laugh reward after the final word is guessed
+- `images/web/`: metadata-free, optimized photos used in the “Our laugh” memory
+- `images/web/little-things-*.jpg`: optimized photos used in “The little things” reel
+- `images/web/simply-us-*.jpg`: ten optimized photos used across the four nested scratch reveals
+- `images/story/`: locally stored photographs used as the ten subtle storyboard backgrounds
+- `credits.html`: photographer and license credits for the storyboard backgrounds
 
 Original phone videos and photos are intentionally ignored by Git because they may contain private device or location metadata. Publish the `.mp4` and the JPG files inside `images/web`, which have had that metadata removed.

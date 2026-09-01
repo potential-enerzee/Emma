@@ -8,14 +8,12 @@
   let currentScene = "welcome";
 
   function fillPersonalText() {
-    document.title = `For ${config.herName} — with love`;
+    document.title = `For ${config.herName}, with love`;
     document.querySelectorAll("[data-her-name]").forEach((element) => {
       element.textContent = config.herName;
     });
     document.querySelectorAll("[data-your-name]").forEach((element) => {
-      element.textContent = element.classList.contains("secret-signoff")
-        ? `— ${config.yourName}`
-        : config.yourName;
+      element.textContent = config.yourName;
     });
     document.querySelector("[data-intro]").textContent = config.intro;
     document.querySelector("[data-secret-message]").textContent = config.secretMessage;
@@ -561,7 +559,7 @@
   // Crack the code: three Wordle rounds
   const wordRounds = config.wordGame?.rounds || [
     { answer: "GREEN", clue: "What colour has your heart claimed as its favourite?" },
-    { answer: "TINKY", clue: "What alternative name have I saved you under in my contacts—the one only we know?", lateHint: "It starts with T." },
+    { answer: "TINKY", clue: "What alternative name have I saved you under in my contacts that only we know?", lateHint: "It starts with T." },
     { answer: "MONKEY", clue: "Which animal do I associate with your cutest chaotic energy?" },
   ];
   const wordGameCard = document.getElementById("word-game-card");
@@ -705,7 +703,7 @@
     window.setTimeout(() => {
       if (solved) {
         wordFinished = true;
-        wordMessage.textContent = round.solved || `Correct—it was ${answer}! ♥`;
+        wordMessage.textContent = round.solved || `Correct! It was ${answer}. ♥`;
         wordHint.textContent = wordRoundIndex === wordRounds.length - 1
           ? "Case closed: cutest little monkey confirmed."
           : "Code cracked. My clever honey wins this round.";
@@ -723,7 +721,7 @@
       wordGuess = "";
       if (wordRow >= 6) {
         wordFinished = true;
-        wordMessage.textContent = `The code was ${answer}. You still win—honey rules. ♥`;
+        wordMessage.textContent = `The code was ${answer}. You still win because honey rules. ♥`;
         wordHint.textContent = wordRoundIndex === 1
           ? "Tinky: my tiny name for the person with the biggest place in my heart."
           : `Mystery solved: ${answer}.`;
@@ -733,7 +731,7 @@
       wordLocked = false;
       wordMessage.textContent = wordRow < 3
         ? "Cute guess. Try again!"
-        : "Summon the couple telepathy—you’ve got this.";
+        : "Summon the couple telepathy. You’ve got this.";
       if (wordRoundIndex === 1 && wordRow >= 3 && round.lateHint) {
         wordHint.textContent = round.lateHint;
       }
@@ -1021,7 +1019,7 @@
     threadPullDistance = 0;
     renderThread();
     threadInstruction.textContent = threadProgress > 0
-      ? "Pull again—don't let them drift apart"
+      ? "Pull again. Don't let them drift apart"
       : "Pull the heart down and hold it tight";
   }
 
