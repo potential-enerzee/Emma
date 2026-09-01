@@ -2628,7 +2628,10 @@ footer {
 .himym-keepsake b svg { display: block; width: 48px; height: 38px; }
 .himym-keepsake small { margin-top: 7px; color: #625650; font-size: 9px; font-weight: 750; line-height: 1.15; }
 .himym-keepsake.patrice { align-content: center; }
-.himym-keepsake.umbrella b { color: #e5b92f; font-family: Georgia, serif; font-size: clamp(34px, 5vw, 48px); }
+.himym-keepsake.umbrella b { color: #e5b92f; }
+.himym-keepsake.umbrella svg { width: 46px; height: 43px; overflow: visible; }
+.himym-keepsake.umbrella .umbrella-canopy { fill: #f2c62f; stroke: #c99814; stroke-width: 2.5; stroke-linejoin: round; }
+.himym-keepsake.umbrella .umbrella-handle { fill: none; stroke: #c99814; stroke-width: 3.5; stroke-linecap: round; }
 .himym-keepsake.horn svg { overflow: visible; fill: #4d78a9; stroke: #345d8b; stroke-width: 3; stroke-linecap: round; stroke-linejoin: round; }
 .ducky-tie {
   display: grid;
