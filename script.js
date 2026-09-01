@@ -19,9 +19,12 @@
     });
     document.querySelector("[data-intro]").textContent = config.intro;
     document.querySelector("[data-secret-message]").textContent = config.secretMessage;
-    document.querySelector("[data-final-question]").textContent = config.finalQuestion;
-    document.querySelector("[data-final-note]").textContent = config.finalNote;
-    document.querySelector("[data-success-message]").textContent = config.successMessage;
+    const finalQuestion = document.querySelector("[data-final-question]");
+    const finalNote = document.querySelector("[data-final-note]");
+    const successMessage = document.querySelector("[data-success-message]");
+    if (finalQuestion) finalQuestion.textContent = config.finalQuestion;
+    if (finalNote) finalNote.textContent = config.finalNote;
+    if (successMessage) successMessage.textContent = config.successMessage;
     document.querySelector(".brand-mark").textContent = config.herName.charAt(0).toUpperCase();
   }
 
@@ -928,18 +931,89 @@
   });
   holdButton.addEventListener("keyup", cancelHold);
 
-  // Celebration
-  const finalActions = document.getElementById("final-actions");
-  const finalContent = document.querySelector(".final-content");
-  const yesMessage = document.getElementById("yes-message");
-  const confetti = document.getElementById("confetti");
+  // Post-unlock story
+  const storyPagesWrap = document.getElementById("story-pages");
+  const storyPages = [...document.querySelectorAll(".story-page")];
+  const storyCount = document.getElementById("story-count");
+  const storyProgress = document.getElementById("story-progress");
+  const storyBack = document.getElementById("story-back");
+  const storyNext = document.getElementById("story-next");
+  const storyNextLabel = document.getElementById("story-next-label");
+  const storyTalkButton = document.getElementById("story-talk-button");
+  const storyClosingCopy = document.getElementById("story-closing-copy");
+  const storyThreadGame = document.getElementById("story-thread-game");
+  const storyFinalReveal = document.getElementById("story-final-reveal");
+  const storyConfetti = document.getElementById("story-confetti");
   const threadStage = document.getElementById("thread-stage");
   const threadPull = document.getElementById("thread-pull");
   const threadLine = document.getElementById("thread-line");
   const threadP = document.getElementById("thread-p");
   const threadE = document.getElementById("thread-e");
+  const threadHeading = document.getElementById("thread-heading");
   const threadInstruction = document.getElementById("thread-instruction");
   const threadSuccess = document.getElementById("thread-success");
+  let storyIndex = 0;
+
+  function showStoryPage(index) {
+    storyIndex = Math.max(0, Math.min(storyPages.length - 1, index));
+    storyPages.forEach((page, pageIndex) => {
+      page.classList.toggle("active", pageIndex === storyIndex);
+      page.setAttribute("aria-hidden", String(pageIndex !== storyIndex));
+    });
+    const page = storyPages[storyIndex];
+    storyCount.textContent = `${String(storyIndex + 1).padStart(2, "0")} / ${String(storyPages.length).padStart(2, "0")}`;
+    storyProgress.style.width = `${((storyIndex + 1) / storyPages.length) * 100}%`;
+    storyBack.disabled = storyIndex === 0;
+    storyNext.hidden = storyIndex === storyPages.length - 1;
+    storyNextLabel.textContent = page.dataset.next || "Continue";
+    storyPagesWrap.scrollTop = 0;
+    const heading = page.querySelector("h2");
+    heading.setAttribute("tabindex", "-1");
+    heading.focus({ preventScroll: true });
+  }
+
+  storyBack.addEventListener("click", () => showStoryPage(storyIndex - 1));
+  storyNext.addEventListener("click", () => showStoryPage(storyIndex + 1));
+
+  document.addEventListener("keydown", (event) => {
+    if (currentScene !== "final") return;
+    if (event.key === "ArrowRight" && storyIndex < storyPages.length - 1) {
+      event.preventDefault();
+      showStoryPage(storyIndex + 1);
+    }
+    if (event.key === "ArrowLeft" && storyIndex > 0) {
+      event.preventDefault();
+      showStoryPage(storyIndex - 1);
+    }
+  });
+
+  const loopNotes = [
+    "A small moment leaves me feeling disconnected.",
+    "Instead of saying it, I quietly pull back.",
+    "That distance can feel like care disappearing.",
+    "Frustration grows, I misunderstand it, and the loop starts again.",
+  ];
+  document.querySelectorAll("[data-loop-step]").forEach((step) => {
+    step.addEventListener("click", () => {
+      document.querySelectorAll("[data-loop-step]").forEach((item) => item.classList.remove("active"));
+      step.classList.add("active");
+      document.getElementById("loop-note").textContent = loopNotes[Number(step.dataset.loopStep)];
+      navigator.vibrate?.(18);
+    });
+  });
+
+  document.querySelectorAll(".truth-card").forEach((card) => {
+    card.addEventListener("click", () => {
+      const willOpen = !card.classList.contains("open");
+      document.querySelectorAll(".truth-card").forEach((item) => {
+        item.classList.remove("open");
+        item.setAttribute("aria-expanded", "false");
+      });
+      card.classList.toggle("open", willOpen);
+      card.setAttribute("aria-expanded", String(willOpen));
+    });
+  });
+
   let threadProgress = 0;
   let pullingThread = false;
   let threadStartY = 0;
@@ -948,29 +1022,18 @@
   let threadLastFrame = 0;
   let keyboardPull = false;
 
-  function throwConfetti(amount = 80) {
-    confetti.replaceChildren();
-    const colors = ["#fffaf6", "#efd88f", "#cbb8dd", "#292522", "#f3bfc0"];
-    for (let i = 0; i < amount; i += 1) {
+  function throwStoryConfetti(amount = 90) {
+    storyConfetti.replaceChildren();
+    const colors = ["#d86d5d", "#e9bf3d", "#7193b8", "#cbb8dd", "#292522"];
+    for (let index = 0; index < amount; index += 1) {
       const piece = document.createElement("i");
       piece.className = "confetti-piece";
       piece.style.left = `${Math.random() * 100}%`;
       piece.style.background = colors[Math.floor(Math.random() * colors.length)];
-      piece.style.borderRadius = Math.random() > 0.6 ? "50%" : "1px";
-      piece.style.setProperty("--fall-x", `${(Math.random() - 0.5) * 180}px`);
-      piece.style.setProperty("--fall-duration", `${2.4 + Math.random() * 2.4}s`);
-      piece.style.setProperty("--fall-delay", `${Math.random() * 0.5}s`);
-      confetti.appendChild(piece);
+      piece.style.setProperty("--fall-duration", `${2.2 + Math.random() * 2.3}s`);
+      piece.style.setProperty("--fall-delay", `${Math.random() * 0.7}s`);
+      storyConfetti.appendChild(piece);
     }
-  }
-
-  function celebrate() {
-    if (yesMessage.classList.contains("visible")) return;
-    finalActions.style.display = "none";
-    finalContent.classList.add("celebrating");
-    yesMessage.classList.add("visible");
-    navigator.vibrate?.([40, 60, 80]);
-    throwConfetti();
   }
 
   function renderThread() {
@@ -993,11 +1056,15 @@
     keyboardPull = false;
     threadProgress = 1;
     renderThread();
+    threadPull.classList.remove("pulling");
     threadStage.classList.add("complete");
     threadSuccess.classList.add("visible");
+    threadHeading.hidden = true;
     threadInstruction.textContent = "Together at last ♥";
+    storyFinalReveal.hidden = false;
     navigator.vibrate?.([50, 45, 50, 45, 100]);
-    throwConfetti(110);
+    throwStoryConfetti();
+    window.setTimeout(() => storyFinalReveal.scrollIntoView({ behavior: "smooth", block: "nearest" }), 450);
   }
 
   function animateThread(now) {
@@ -1008,9 +1075,11 @@
     threadLastFrame = now;
 
     if (tension > 0) {
-      threadProgress = Math.min(1, threadProgress + (elapsed / 2400) * (0.45 + tension * 0.55));
+      threadProgress = Math.min(1, threadProgress + (elapsed / 2300) * (0.45 + tension * 0.55));
       renderThread();
-      threadInstruction.textContent = threadProgress < 0.55 ? "Keep pulling… they’re getting closer" : "Almost together… keep holding";
+      threadInstruction.textContent = threadProgress < 0.55
+        ? "Keep pulling… they’re getting closer"
+        : "Almost together… keep holding";
     }
 
     if (threadProgress >= 1) {
@@ -1052,9 +1121,17 @@
     threadPullDistance = 0;
     renderThread();
     threadInstruction.textContent = threadProgress > 0
-      ? "Pull again—don’t let them drift apart"
-      : "Pull our thread down and hold it tight";
+      ? "Pull again—don't let them drift apart"
+      : "Pull the heart down and hold it tight";
   }
+
+  storyTalkButton.addEventListener("click", () => {
+    storyClosingCopy.hidden = true;
+    storyThreadGame.hidden = false;
+    renderThread();
+    threadPull.focus({ preventScroll: true });
+    navigator.vibrate?.([30, 45, 60]);
+  });
 
   threadPull.addEventListener("pointerdown", (event) => beginThreadPull(event));
   threadPull.addEventListener("pointermove", moveThreadPull);
@@ -1067,11 +1144,10 @@
     if (event.key === " " || event.key === "Enter") endThreadPull(event);
   });
   window.addEventListener("resize", () => {
-    if (!pullingThread && !threadStage.classList.contains("complete")) renderThread();
+    if (!storyThreadGame.hidden && !pullingThread && !threadStage.classList.contains("complete")) renderThread();
   });
 
-  document.getElementById("yes-button").addEventListener("click", celebrate);
-  document.getElementById("also-yes-button").addEventListener("click", celebrate);
+  showStoryPage(0);
 
   function escapeHTML(value) {
     const element = document.createElement("span");

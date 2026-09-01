@@ -293,10 +293,15 @@
                         <img src="images/web/simply-us-1.jpg" alt="Emma walking along a country road" />
                         <figcaption>My favourite model</figcaption>
                       </figure>
-                      <img src="images/web/simply-us-2.jpg" alt="Emma making a wonderfully silly face among flowers" />
-                      <img class="us-landscape" src="images/web/simply-us-3.jpg" alt="Pritesh and Emma smiling together in the car" />
+                      <figure class="us-photo-with-caption">
+                        <img src="images/web/simply-us-2.jpg" alt="Emma making a wonderfully silly face among flowers" />
+                        <figcaption>Every laugh (perfect teeth)</figcaption>
+                      </figure>
+                      <figure class="us-photo-with-caption">
+                        <img class="us-landscape" src="images/web/simply-us-3.jpg" alt="Pritesh and Emma smiling together in the car" />
+                        <figcaption>Every road and every ride</figcaption>
+                      </figure>
                     </div>
-                    <p>Every road, every laugh, every ride.</p>
                   </div>
                   <canvas class="us-scratch-canvas" aria-label="Scratch to uncover photos one through three"></canvas>
                 </div>
@@ -328,11 +333,19 @@
                 <div class="us-scratch-card">
                   <div class="us-reveal-card us-reveal-three">
                     <div class="us-photo-grid">
-                      <img src="images/web/simply-us-7.jpg" alt="Emma adventuring on a forest trail" />
-                      <img src="images/web/simply-us-8.jpg" alt="Emma climbing a rock by the sea" />
-                      <img src="images/web/simply-us-9.jpg" alt="Pritesh and Emma smiling in a playful selfie" />
+                      <figure class="us-photo-with-caption">
+                        <img src="images/web/simply-us-7.jpg" alt="Emma adventuring on a forest trail" />
+                        <figcaption>Every adventure</figcaption>
+                      </figure>
+                      <figure class="us-photo-with-caption">
+                        <img src="images/web/simply-us-8.jpg" alt="Emma climbing a rock by the sea" />
+                        <figcaption>Every climb</figcaption>
+                      </figure>
+                      <figure class="us-photo-with-caption">
+                        <img src="images/web/simply-us-9.jpg" alt="Pritesh and Emma smiling in a playful selfie" />
+                        <figcaption>Every version of us</figcaption>
+                      </figure>
                     </div>
-                    <p>Every climb, every adventure, every version of us.</p>
                   </div>
                   <canvas class="us-scratch-canvas" aria-label="Scratch to uncover photos seven through nine"></canvas>
                 </div>
@@ -490,9 +503,9 @@
         <div class="hold-content">
           <p class="eyebrow">The final chapter</p>
           <h2 id="hold-title">Okay. Ready?</h2>
-          <p>Press and hold the heart to unlock my question.</p>
+          <p>Press and hold the heart to unlock a few things I want to say.</p>
 
-          <button class="hold-button" id="hold-button" aria-label="Press and hold to unlock">
+          <button class="hold-button" id="hold-button" aria-label="Press and hold to unlock my thoughts">
             <svg class="hold-ring" viewBox="0 0 120 120" aria-hidden="true">
               <circle class="ring-bg" cx="60" cy="60" r="54"></circle>
               <circle class="ring-progress" cx="60" cy="60" r="54"></circle>
@@ -503,45 +516,196 @@
         </div>
       </section>
 
-      <section class="scene final-scene" id="final" data-step="7" aria-labelledby="final-title">
-        <div class="confetti" id="confetti" aria-hidden="true"></div>
-        <div class="final-content">
-          <p class="eyebrow">So, <span data-her-name>Emma</span>...</p>
-          <h2 id="final-title" data-final-question>
-            Will you be my travel companion and let’s explore more things together?
-          </h2>
-          <p data-final-note>I promise snacks, bad jokes, and a whole lot of love.</p>
-          <div class="final-actions" id="final-actions">
-            <button class="primary-button yes-button" id="yes-button">
-              Yes, obviously <span aria-hidden="true">♥</span>
-            </button>
-            <button class="soft-button" id="also-yes-button">Also yes</button>
-          </div>
-          <div class="yes-message" id="yes-message" role="status">
-            <span class="big-heart" aria-hidden="true">♥</span>
-            <strong data-success-message>Best answer ever.</strong>
-            <div class="thread-game" id="thread-game">
-              <p class="thread-instruction" id="thread-instruction">Pull our thread down and hold it tight</p>
-              <div class="thread-stage" id="thread-stage">
-                <span class="thread-letter thread-p" id="thread-p" aria-label="P">P</span>
-                <svg class="love-thread" viewBox="0 0 600 170" preserveAspectRatio="none" aria-hidden="true">
-                  <path id="thread-line" d="M 55 45 L 300 45 L 545 45"></path>
-                </svg>
-                <button class="thread-pull" id="thread-pull" type="button" aria-describedby="thread-instruction">
-                  <span aria-hidden="true">♥</span>
-                  <small>pull</small>
-                </button>
-                <span class="thread-letter thread-e" id="thread-e" aria-label="E">E</span>
-                <div class="thread-success" id="thread-success" aria-live="polite">
-                  <span>P <i aria-hidden="true">♥</i> E</span>
-                  <strong>Great success!</strong>
-                  <img class="success-cat" src="cat-dancing-cat.gif" alt="A happy cat dancing in celebration" />
-                </div>
-              </div>
+      <section class="scene story-scene" id="final" data-step="7" aria-labelledby="story-title">
+        <div class="story-shell">
+          <header class="story-header">
+            <div>
+              <span>A few things I understand now · <a class="photo-credits-link" href="credits.html" target="_blank" rel="noopener">photo credits</a></span>
+              <strong id="story-count">01 / 10</strong>
             </div>
+            <div class="story-track" aria-hidden="true"><i id="story-progress"></i></div>
+          </header>
+
+          <div class="story-pages" id="story-pages">
+            <article class="story-page active story-page-light theme-pumpkin" data-story-page="0" data-next="Okay philosopher, continue">
+              <p class="story-kicker">A small software update</p>
+              <h2 id="story-title">Apparently, I needed one.</h2>
+              <div class="story-copy">
+                <p>So… I did some thinking. Like, actual thinking.</p>
+                <p>Not my usual “stare at the ceiling for seven minutes and somehow end up thinking about food” kind of thinking.</p>
+                <p>I sat with everything you told me. And, probably for the first time in a long time, I also sat down and tried to understand myself.</p>
+                <blockquote>Turns out there were a lot of tabs open in my brain that I didn’t even know were running.</blockquote>
+                <p>I’ve started understanding some things I really wish I’d understood sooner.</p>
+              </div>
+            </article>
+
+            <article class="story-page theme-thai" data-story-page="1" data-next="Plot twist: there was another side">
+              <p class="story-kicker">What I hear now</p>
+              <h2>You were trying to tell me something.</h2>
+              <div class="story-copy">
+                <p>You wanted more than just time together. You wanted to feel me there.</p>
+                <p>More calls. More little messages. More curiosity about your day. More conversations that went somewhere deeper than what we were eating or doing tomorrow.</p>
+                <p>You wanted me to take initiative sometimes instead of making you feel like the unpaid CEO of our relationship. And you wanted to feel cared for without always having to explain how.</p>
+                <blockquote>“I want to feel more connected to you.”</blockquote>
+                <p>I understand now that it wasn’t really about how many hours we spent together. It was about how we spent them—and how connected we felt while we were together.</p>
+              </div>
+            </article>
+
+            <article class="story-page story-page-lilac theme-coast" data-story-page="2" data-next="Ah. There it is">
+              <p class="story-kicker">Meanwhile, behind the scenes</p>
+              <h2>Inside my ridiculously complicated brain…</h2>
+              <div class="story-copy">
+                <p>Something else was happening too. The strange part is that I didn’t understand it while it was happening.</p>
+                <p>There were little moments when I felt disconnected, unheard, uncertain, or hurt. A call wouldn’t get answered. A conversation would suddenly stop. Sometimes I’d suggest something and feel like my preference didn’t really matter.</p>
+                <p>None of those moments seemed big enough for me to say, “<span data-her-name>Emma</span>, this is affecting me.” So I didn’t.</p>
+                <aside>Brilliant communication strategy, I know. 10/10. No notes.</aside>
+                <p>Instead, I made quiet interpretations: maybe she’s busy; maybe she doesn’t feel like talking; maybe this isn’t important to her. I’ll just leave it.</p>
+                <p>And without consciously deciding to, I gradually pulled back.</p>
+              </div>
+            </article>
+
+            <article class="story-page theme-clear-lake" data-story-page="3" data-next="See the loop we may have built">
+              <p class="story-kicker">The part I wish I understood then</p>
+              <h2>This is where I went wrong.</h2>
+              <div class="story-copy">
+                <blockquote>Feeling those things wasn’t wrong. Not communicating them was.</blockquote>
+                <p>I wasn’t consciously thinking, “Emma did this, so now I’m going to become distant.” I wasn’t processing my emotions deeply enough to understand that I was becoming distant.</p>
+                <p>Instead of saying, “I’ve been feeling disconnected lately,” or asking, “Is that actually what you mean?” I kept everything inside and let my behavior do the communicating.</p>
+                <aside>Unfortunately, my behavior apparently speaks a language neither of us understands.</aside>
+                <p>I can understand how that distance could have looked like I wasn’t putting in effort or didn’t care enough. I wish I had given you the explanation that I didn’t even know how to give myself yet.</p>
+              </div>
+            </article>
+
+            <article class="story-page story-page-sage theme-waterfall" data-story-page="4" data-next="The things I should have said">
+              <p class="story-kicker">An accidental feedback loop</p>
+              <h2>And then we built a loop.</h2>
+              <p class="story-instruction">Tap each step to follow what may have happened.</p>
+              <div class="story-loop" id="story-loop">
+                <button type="button" data-loop-step="0">I feel disconnected</button><span>→</span>
+                <button type="button" data-loop-step="1">I withdraw</button><span>→</span>
+                <button type="button" data-loop-step="2">Emma feels less cared for</button><span>→</span>
+                <button type="button" data-loop-step="3">Frustration grows</button><span>↻</span>
+              </div>
+              <p class="loop-note" id="loop-note">Well… that’s not an ideal feature.</p>
+              <div class="story-copy compact">
+                <p>I don’t know if this is exactly how you experienced it. That’s something only you can tell me.</p>
+                <p>But looking back, I wonder whether we got caught in something like this—not because either of us stopped caring, but because we stopped understanding what the other person’s behavior was trying to say.</p>
+              </div>
+            </article>
+
+            <article class="story-page theme-springs" data-story-page="5" data-next="What this website is not">
+              <p class="story-kicker">Tap to open</p>
+              <h2>Things I should have made easier for both of us to say.</h2>
+              <p class="story-instruction">Each card makes room for what I felt, what your side may have been, and the conversation we deserved. Tap any card.</p>
+              <div class="truth-cards">
+                <button class="truth-card" type="button" aria-expanded="false"><b>📞</b><strong>When calls didn’t connect</strong><span><em>What I felt</em>I sometimes felt distant or uncertain when I couldn’t reach you.<br /><em>What your side may have been</em>You may have been busy, overwhelmed, or simply needed space—and I didn’t pause to understand.<br /><em>What I wish I had said</em>“I miss talking to you. Is there a time that feels good for both of us?”</span></button>
+                <button class="truth-card" type="button" aria-expanded="false"><b>🧭</b><strong>Making plans together</strong><span><em>What I felt</em>I sometimes hesitated because I wasn’t sure whether my preferences fit.<br /><em>What your side may have been</em>You wanted more initiative and to feel that I was actively choosing our time together.<br /><em>What I wish I had said</em>“I have an idea for us—and I also want to know what would make it fun for you.”</span></button>
+                <button class="truth-card" type="button" aria-expanded="false"><b>👂</b><strong>Both of us feeling heard</strong><span><em>What I felt</em>I wanted my feelings to be understood instead of keeping them inside.<br /><em>What your side may have been</em>You deserved the same attention, without your feelings becoming something I explained away or debated.<br /><em>What I wish I had said</em>“Let me understand your experience first. Then, if you’re ready, I’d like to share mine too.”</span></button>
+                <button class="truth-card" type="button" aria-expanded="false"><b>❤️</b><strong>How we each receive care</strong><span><em>What I felt</em>I sometimes needed reassurance, but I rarely asked for it clearly.<br /><em>What your side may have been</em>You may have needed care through initiative, consistency, or more emotional presence from me.<br /><em>What I wish I had said</em>“What would help you feel loved right now? Here’s what would help me too.”</span></button>
+              </div>
+              <p class="story-footnote">I think we were both trying to understand each other with incomplete information. I wish I had replaced more of my assumptions with gentler questions—and made more room for your answers.</p>
+            </article>
+
+            <article class="story-page story-page-butter theme-gardens" data-story-page="6" data-next="The part you were right about">
+              <p class="story-kicker">A brief legal disclaimer</p>
+              <h2>What I don’t want this website to say.</h2>
+              <div class="courtroom-card">
+                <span>Exhibit A: unanswered call.</span>
+                <span>Exhibit B: suspicious 14-minute text delay.</span>
+                <span>Exhibit C: Pritesh dramatically points at PowerPoint.</span>
+                <strong>Case closed. 😂</strong>
+              </div>
+              <div class="story-copy compact">
+                <p>No. This isn’t my courtroom presentation.</p>
+                <p>I’m not trying to prove that you were wrong, that I was right, or to replace your feelings with my explanation.</p>
+                <blockquote>Your experience was real even if mine was different. I’m finally beginning to understand my experience too. I think both deserve to be heard.</blockquote>
+              </div>
+            </article>
+
+            <article class="story-page theme-bowling" data-story-page="7" data-next="One thing I still don’t know">
+              <p class="story-kicker">What mattered underneath it all</p>
+              <h2>The part you were right about.</h2>
+              <div class="story-copy compact">
+                <p>You wanted connection. And I think I confused being physically present with always being emotionally present.</p>
+                <p>We could spend an entire day together and still miss the conversations that mattered more than another five hours sitting next to each other.</p>
+              </div>
+              <div class="connection-questions" aria-label="Questions I wish we had asked more often">
+                <span>How are you—actually?</span><span>What’s been bothering you?</span>
+                <span>What do you need from me?</span><span>Is something I’m doing hurting you?</span>
+                <span>Am I carrying something I haven’t told you?</span>
+              </div>
+              <p class="story-footnote">I understand what you meant now.</p>
+            </article>
+
+            <article class="story-page story-page-lilac theme-cooking" data-story-page="8" data-next="One last thing, Emma">
+              <p class="story-kicker">An important limitation</p>
+              <h2>I don’t suddenly understand everything.</h2>
+              <div class="story-copy">
+                <p>One small problem with my brilliant analysis: there were two people in this relationship, and I’ve only had access to one brain. Mine was complicated enough.</p>
+                <p>I don’t want to tell you what you felt. I don’t want to assume why you did certain things. And I don’t want to convince myself that I’ve solved us because I’ve spent time understanding myself.</p>
+                <blockquote>There are things only you can help me understand.</blockquote>
+                <p>I want to know what those months felt like from your side—not so I can defend myself, but because I genuinely want to hear you.</p>
+              </div>
+            </article>
+
+            <article class="story-page story-page-final theme-himym" data-story-page="9">
+              <div class="story-closing-copy" id="story-closing-copy">
+                <p class="story-kicker">So, <span data-her-name>Emma</span>…</p>
+                <h2>If you made it this far, congratulations.</h2>
+                <div class="story-copy compact">
+                  <p>You have survived both this website and an unusually high concentration of Pritesh thoughts. Your prize is unfortunately… more Pritesh. Just for one last minute. ❤️</p>
+                  <p>I made this because I wanted you to know that I heard what you said—maybe later than I should have, but I hear it differently now.</p>
+                  <p>I know a website can’t fix a relationship. If trust between us is ever rebuilt, it won’t be because I found perfect words or made one big gesture. It would have to come from how I show up consistently in the little moments.</p>
+                  <blockquote>What I really want is a genuine conversation with you. No scorekeeping. No pressure to have an answer about us. Just two people finally talking about the things we didn’t know how to talk about before.</blockquote>
+                  <p>If you’re comfortable having that conversation, I’d really like to have it. And this time, I promise I’ll do a lot more listening than website development. ❤️</p>
+                </div>
+                <button class="story-talk-button" id="story-talk-button" type="button">One last step: bring P + E together</button>
+              </div>
+
+              <div class="story-thread-game" id="story-thread-game" hidden>
+                <p class="story-kicker">Our little red thread</p>
+                <h2 id="thread-heading">Bring P and E together.</h2>
+                <p class="thread-instruction" id="thread-instruction">Pull the heart down and hold it tight</p>
+                <div class="thread-stage" id="thread-stage">
+                  <span class="thread-letter thread-p" id="thread-p" aria-label="P">P</span>
+                  <svg class="love-thread" viewBox="0 0 600 170" preserveAspectRatio="none" aria-hidden="true">
+                    <path id="thread-line" d="M 55 45 L 300 45 L 545 45"></path>
+                  </svg>
+                  <button class="thread-pull" id="thread-pull" type="button" aria-describedby="thread-instruction">
+                    <span aria-hidden="true">♥</span>
+                    <small>pull</small>
+                  </button>
+                  <span class="thread-letter thread-e" id="thread-e" aria-label="E">E</span>
+                  <div class="thread-success" id="thread-success" aria-live="polite">
+                    <span>P <i aria-hidden="true">♥</i> E</span>
+                  </div>
+                </div>
+
+                <div class="story-final-reveal" id="story-final-reveal" role="status" hidden>
+                  <p class="reveal-kicker">And the answer is…</p>
+                  <h3>Yes, I do want uppies :)</h3>
+                  <p>Whenever you’re ready, I will be there and listen.</p>
+                  <div class="himym-keepsakes" aria-label="How I Met Your Mother memories">
+                    <span class="himym-keepsake umbrella" aria-label="The yellow umbrella"><b aria-hidden="true">☂</b></span>
+                    <span class="himym-keepsake horn" aria-label="The blue French horn"><b aria-hidden="true"><svg viewBox="0 0 64 48"><path d="M8 30c17-2 25-12 29-21l9 5c-4 7-4 15 1 22-9 3-17-1-21-8-5 5-11 9-18 10Z"></path><path d="M45 13c8-5 15 0 12 7-2 5-9 4-10-1M8 30v10"></path></svg></b></span>
+                    <span class="himym-keepsake tie" aria-label="The ducky tie"><b aria-hidden="true"><i class="ducky-tie">🦆</i></b></span>
+                    <span class="himym-keepsake pineapple" aria-label="The pineapple mystery"><b aria-hidden="true">🍍</b></span>
+                    <span class="himym-keepsake boots" aria-label="The red cowboy boots"><b aria-hidden="true">👢</b></span>
+                    <span class="himym-keepsake patrice"><b aria-hidden="true">📣</b><small>Nobody asked you, Patrice!</small></span>
+                  </div>
+                </div>
+                <div class="story-confetti" id="story-confetti" aria-hidden="true"></div>
+              </div>
+            </article>
+          </div>
+
+          <div class="story-nav">
+            <button class="story-back" id="story-back" type="button" disabled aria-label="Previous chapter">←</button>
+            <button class="story-next" id="story-next" type="button">
+              <span id="story-next-label">Okay philosopher, continue</span><b aria-hidden="true">→</b>
+            </button>
           </div>
         </div>
-        <footer>Made with love by <span data-your-name>Pritesh</span></footer>
       </section>
     </main>
 
