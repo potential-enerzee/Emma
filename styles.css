@@ -1499,10 +1499,22 @@ h1 em::after {
 .us-photo-with-caption {
   display: grid;
   grid-template-rows: minmax(0, 1fr) 40px;
-  gap: 7px;
+  gap: 0;
   min-width: 0;
+  min-height: 0;
   height: 100%;
   margin: 0;
+  padding: clamp(4px, 0.7vw, 8px) clamp(4px, 0.7vw, 8px) 0;
+  background: white;
+  box-shadow: 0 10px 24px rgba(41, 37, 34, 0.15);
+}
+
+.us-photo-with-caption img {
+  height: auto;
+  min-height: 0;
+  align-self: stretch;
+  border: 0;
+  box-shadow: none;
 }
 
 .us-photo-with-caption figcaption {
@@ -1518,12 +1530,11 @@ h1 em::after {
 }
 
 .us-reveal-one .us-photo-grid,
+.us-reveal-two .us-photo-grid,
 .us-reveal-three .us-photo-grid { height: 100%; }
 
-.us-photo-grid > img:first-child,
-.us-photo-with-caption:first-child img { transform: rotate(-1.5deg); }
-.us-photo-grid > img:last-child,
-.us-photo-with-caption:last-child img { transform: rotate(1.5deg); }
+.us-photo-grid > img:first-child { transform: rotate(-1.5deg); }
+.us-photo-grid > img:last-child { transform: rotate(1.5deg); }
 .us-photo-grid img.us-landscape { object-fit: contain; }
 
 .us-reveal-card > p {
