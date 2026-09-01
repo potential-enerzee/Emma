@@ -145,7 +145,7 @@ a:focus-visible {
 
 .progress-fill {
   display: block;
-  width: 14.285%;
+  width: 20%;
   height: 100%;
   background: var(--coral);
   transition: width 0.8s var(--ease);

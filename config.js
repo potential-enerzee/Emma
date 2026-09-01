@@ -64,21 +64,6 @@ window.LOVE_STORY = {
     ],
   },
 
-  questions: [
-    {
-      question: "What makes the best kind of date?",
-      answers: ["A cozy night in", "A spontaneous adventure", "Anything together"],
-    },
-    {
-      question: "Who is the better cuddler?",
-      answers: ["Definitely you", "Definitely me", "It’s a perfect tie"],
-    },
-    {
-      question: "How long should our story last?",
-      answers: ["A very long time", "Forever sounds good", "Forever + one day"],
-    },
-  ],
-
   finalQuestion: "Will you be my travel companion and let’s explore more things together?",
   finalNote: "I promise snacks, bad jokes, and a whole lot of love.",
   successMessage: "Best answer ever.",

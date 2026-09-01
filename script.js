@@ -45,11 +45,10 @@
     currentScene = sceneId;
 
     const step = Number(nextScene.dataset.step || 1);
-    progressLabel.textContent = `${String(step).padStart(2, "0")} / 07`;
-    progressFill.style.width = `${(step / 7) * 100}%`;
+    progressLabel.textContent = `${String(step).padStart(2, "0")} / 05`;
+    progressFill.style.width = `${(step / 5) * 100}%`;
 
     if (sceneId === "scratch") window.setTimeout(setupScratchCard, 80);
-    if (sceneId === "quiz") renderQuestion();
     nextScene.querySelector("h1, h2")?.focus({ preventScroll: true });
   }
 
@@ -765,7 +764,7 @@
       return;
     }
     monkeyLaughVideo.pause();
-    goTo("quiz");
+    goTo("hold");
   });
 
   renderWordRound();
@@ -778,105 +777,6 @@
     if (event.key === "Enter") handleWordKey("ENTER");
     else if (event.key === "Backspace") handleWordKey("BACK");
     else if (/^[a-zA-Z]$/.test(event.key)) handleWordKey(event.key.toUpperCase());
-  });
-
-  // Quiz
-  let questionIndex = 0;
-  const quizCard = document.getElementById("quiz-card");
-  const quizCount = document.getElementById("quiz-count");
-  const quizQuestion = document.getElementById("quiz-question");
-  const quizAnswers = document.getElementById("quiz-answers");
-
-  function renderQuestion() {
-    const item = config.questions[questionIndex];
-    if (!item) return;
-    quizCount.textContent = `Question ${questionIndex + 1} of ${config.questions.length}`;
-    quizQuestion.textContent = item.question;
-    quizAnswers.replaceChildren();
-    item.answers.forEach((answer) => {
-      const button = document.createElement("button");
-      button.className = "answer-button";
-      button.textContent = answer;
-      button.addEventListener("click", chooseAnswer);
-      quizAnswers.appendChild(button);
-    });
-  }
-
-  function chooseAnswer() {
-    if (quizCard.classList.contains("switching")) return;
-    if (questionIndex === config.questions.length - 1) {
-      goTo("pack-game");
-      return;
-    }
-    quizCard.classList.add("switching");
-    window.setTimeout(() => {
-      questionIndex += 1;
-      renderQuestion();
-    }, 190);
-    window.setTimeout(() => quizCard.classList.remove("switching"), 430);
-  }
-
-  // Pack our adventure bag
-  const packItems = document.getElementById("pack-items");
-  const packedItems = document.getElementById("packed-items");
-  const suitcase = document.getElementById("suitcase");
-  const packCount = document.getElementById("pack-count");
-  const packStatus = document.getElementById("pack-status");
-  const packNext = document.getElementById("pack-next");
-  let packedCount = 0;
-  let packingComplete = false;
-  const packReactions = {
-    "pack-passports": "Responsible choice. Suspiciously responsible.",
-    "pack-snacks": "The most important travel document: snacks.",
-    "pack-camera": "For evidence that we actually went outside.",
-    "pack-cuddles": "Excellent. These fit in every overhead compartment.",
-    "pack-kiwi": "Kiwi has been promoted to breakfast supervisor. Muaaahh!",
-    "pack-socks": "Forty-seven socks and somehow none of them match.",
-  };
-
-  function packItem(item) {
-    if (!item || item.classList.contains("packed") || packingComplete) return;
-    item.classList.add("packed");
-    item.draggable = false;
-    packedItems.appendChild(item);
-    packedCount += 1;
-    packCount.textContent = `${packedCount} / 4 essentials packed`;
-    packStatus.textContent = packReactions[item.id];
-    navigator.vibrate?.(25);
-
-    if (packedCount === 4) {
-      packingComplete = true;
-      suitcase.classList.add("complete");
-      packStatus.textContent = "Perfectly packed. Questionable choices, excellent adventure. ♥";
-      packNext.hidden = false;
-      packItems.querySelectorAll(".pack-item").forEach((remaining) => {
-        remaining.disabled = true;
-        remaining.draggable = false;
-      });
-      navigator.vibrate?.([30, 40, 60]);
-    }
-  }
-
-  document.querySelectorAll(".pack-item").forEach((item) => {
-    item.addEventListener("click", () => packItem(item));
-    item.addEventListener("dragstart", (event) => {
-      event.dataTransfer.setData("text/plain", item.id);
-      event.dataTransfer.effectAllowed = "move";
-      suitcase.classList.add("drag-over");
-    });
-    item.addEventListener("dragend", () => suitcase.classList.remove("drag-over"));
-  });
-
-  suitcase.addEventListener("dragover", (event) => {
-    event.preventDefault();
-    event.dataTransfer.dropEffect = "move";
-    suitcase.classList.add("drag-over");
-  });
-  suitcase.addEventListener("dragleave", () => suitcase.classList.remove("drag-over"));
-  suitcase.addEventListener("drop", (event) => {
-    event.preventDefault();
-    suitcase.classList.remove("drag-over");
-    packItem(document.getElementById(event.dataTransfer.getData("text/plain")));
   });
 
   // Hold to unlock
