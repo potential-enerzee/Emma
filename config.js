@@ -67,4 +67,5 @@ window.LOVE_STORY = {
   finalQuestion: "Do you want uppies this time?",
   finalNote: "My turn to catch you. ♥",
   successMessage: "One legendary hug, coming right up. ♥",
+  photoCaption: "I wanna be with you everywhere",
 };

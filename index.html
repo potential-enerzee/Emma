@@ -17,15 +17,25 @@
     <div class="ambient ambient-one" aria-hidden="true"></div>
     <div class="ambient ambient-two" aria-hidden="true"></div>
 
+    <audio id="background-music" autoplay loop preload="metadata" aria-hidden="true">
+      <source src="song/Fleetwood Mac - Everywhere Official Music Video.mp3" type="audio/mpeg" />
+    </audio>
+
     <main class="app" id="app">
       <header class="topbar">
         <a class="brand" href="#" aria-label="Start over">
           <span class="brand-mark">E</span>
           <span>for you</span>
         </a>
-        <div class="chapter-progress" aria-label="Journey progress">
-          <span class="progress-label">01 / 05</span>
-          <div class="progress-track"><span class="progress-fill"></span></div>
+        <div class="topbar-actions">
+          <div class="chapter-progress" aria-label="Journey progress">
+            <span class="progress-label">01 / 05</span>
+            <div class="progress-track"><span class="progress-fill"></span></div>
+          </div>
+          <button class="music-toggle" id="music-toggle" type="button" aria-label="Play background music" aria-pressed="false">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 9v6M12 5v14M19 8v8" /></svg>
+            <span>Music</span>
+          </button>
         </div>
       </header>
 
@@ -523,14 +533,13 @@
               <p class="himym-aside"><span aria-hidden="true">✦</span> Wait for it…</p>
             </article>
             <article class="story-page story-page-final adventure-finale" data-story-page="5">
+              <img class="finale-background" src="images/web/the-hug.jpg" alt="" aria-hidden="true" loading="lazy" />
               <div class="story-closing-copy" id="story-closing-copy">
                 <p class="story-kicker">The season finale</p>
-                <div class="finale-umbrella" aria-hidden="true">☂</div>
                 <h2>Every adventure.<br />A little more <em>us.</em></h2>
                 <p class="adventure-caption">From our first hello in a pumpkin patch to Thai dates, mountain trails, ridiculous laughs, and coastal drives.</p>
                 <p class="finale-note">One last little thing, <span data-her-name>Emma</span>…</p>
                 <button class="story-talk-button" id="story-talk-button" type="button">Bring P + E together <span aria-hidden="true">♥</span></button>
-                <p class="himym-aside">A little How I Met Your Mother magic.</p>
               </div>
 
               <div class="story-thread-game" id="story-thread-game" hidden>
@@ -561,15 +570,6 @@
                     <button class="story-talk-button" id="uppies-yes" type="button">Yes, uppies! <span aria-hidden="true">♥</span></button>
                     <button class="uppies-later" id="uppies-later" type="button">Save me a hug</button>
                   </div>
-                  <p class="uppies-answer" id="uppies-answer" role="status"></p>
-                  <div class="himym-keepsakes" aria-label="How I Met Your Mother memories">
-                    <span class="himym-keepsake umbrella" aria-label="The yellow umbrella"><b aria-hidden="true"><svg viewBox="0 0 64 58"><path class="umbrella-canopy" d="M5 28C8 12 19 4 32 4s24 8 27 24c-7-5-12-5-18 0-6-5-12-5-18 0-6-5-11-5-18 0Z"></path><path class="umbrella-handle" d="M32 27v20c0 10 13 10 13 1"></path></svg></b></span>
-                    <span class="himym-keepsake horn" aria-label="The blue French horn"><b aria-hidden="true"><svg viewBox="0 0 64 48"><path d="M8 30c17-2 25-12 29-21l9 5c-4 7-4 15 1 22-9 3-17-1-21-8-5 5-11 9-18 10Z"></path><path d="M45 13c8-5 15 0 12 7-2 5-9 4-10-1M8 30v10"></path></svg></b></span>
-                    <span class="himym-keepsake tie" aria-label="The ducky tie"><b aria-hidden="true"><i class="ducky-tie">🦆</i></b></span>
-                    <span class="himym-keepsake pineapple" aria-label="The pineapple mystery"><b aria-hidden="true">🍍</b></span>
-                    <span class="himym-keepsake boots" aria-label="The red cowboy boots"><b aria-hidden="true">👢</b></span>
-                    <span class="himym-keepsake patrice"><b aria-hidden="true">📣</b><small>Nobody asked you, Patrice!</small></span>
-                  </div>
                 </div>
                 <div class="story-confetti" id="story-confetti" aria-hidden="true"></div>
               </div>
@@ -585,6 +585,16 @@
         </div>
       </section>
     </main>
+
+    <dialog class="uppies-photo-dialog" id="uppies-photo-dialog" aria-labelledby="uppies-photo-caption">
+      <form method="dialog">
+        <button class="uppies-photo-close" type="submit" aria-label="Close the photo">×</button>
+      </form>
+      <figure>
+        <img id="uppies-photo" src="images/web/the-hug.jpg" alt="Pritesh hugging Emma and kissing her cheek on the beach" />
+        <figcaption id="uppies-photo-caption">I wanna be with you everywhere</figcaption>
+      </figure>
+    </dialog>
 
     <noscript>This little adventure needs JavaScript enabled to work.</noscript>
     <script src="config.js"></script>

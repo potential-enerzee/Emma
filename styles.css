@@ -2423,46 +2423,6 @@ footer {
   font-size: clamp(16px, 2vw, 20px);
 }
 
-.himym-keepsakes {
-  display: grid;
-  grid-template-columns: repeat(6, minmax(0, 1fr));
-  gap: 8px;
-}
-.himym-keepsake {
-  display: grid;
-  min-width: 0;
-  min-height: 64px;
-  padding: 10px 5px;
-  place-items: center;
-  background: #fff9f3;
-  border: 1px solid rgba(41, 37, 34, 0.08);
-  border-radius: 13px;
-  transform: rotate(var(--keepsake-tilt, -1deg));
-}
-.himym-keepsake:nth-child(even) { --keepsake-tilt: 1.5deg; }
-.himym-keepsake b { font-size: clamp(25px, 4vw, 38px); line-height: 1; }
-.himym-keepsake b svg { display: block; width: 48px; height: 38px; }
-.himym-keepsake small { margin-top: 7px; color: #625650; font-size: 9px; font-weight: 750; line-height: 1.15; }
-.himym-keepsake.patrice { align-content: center; }
-.himym-keepsake.umbrella b { color: #e5b92f; }
-.himym-keepsake.umbrella svg { width: 46px; height: 43px; overflow: visible; }
-.himym-keepsake.umbrella .umbrella-canopy { fill: #f2c62f; stroke: #c99814; stroke-width: 2.5; stroke-linejoin: round; }
-.himym-keepsake.umbrella .umbrella-handle { fill: none; stroke: #c99814; stroke-width: 3.5; stroke-linecap: round; }
-.himym-keepsake.horn svg { overflow: visible; fill: #4d78a9; stroke: #345d8b; stroke-width: 3; stroke-linecap: round; stroke-linejoin: round; }
-.ducky-tie {
-  display: grid;
-  width: 31px;
-  height: 42px;
-  place-items: start center;
-  padding-top: 9px;
-  background: #efbd32;
-  clip-path: polygon(20% 0, 80% 0, 93% 17%, 66% 100%, 34% 100%, 7% 17%);
-  font-size: 14px;
-  font-style: normal;
-  line-height: 1;
-}
-.himym-keepsake.patrice { background: #f8e3eb; }
-
 .story-confetti { position: absolute; z-index: 4; inset: 0; overflow: hidden; pointer-events: none; }
 .story-confetti .confetti-piece { border-radius: 2px; }
 
@@ -2717,8 +2677,6 @@ noscript {
   .story-thread-game { padding-top: 3px; }
   .story-thread-game .thread-stage { height: 185px; }
   .story-final-reveal { padding: 18px 12px; }
-  .himym-keepsakes { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 6px; }
-  .himym-keepsake { padding: 8px 4px 7px; }
 }
 
 @keyframes littleJumpMobile {

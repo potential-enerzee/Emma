@@ -7,6 +7,56 @@
   const progressFill = document.querySelector(".progress-fill");
   let currentScene = "welcome";
 
+  // Keep one music player running across the entire adventure.
+  const backgroundMusic = document.getElementById("background-music");
+  const musicToggle = document.getElementById("music-toggle");
+  let wantsMusic = true;
+  const musicVolume = 0.16;
+  backgroundMusic.volume = musicVolume;
+  backgroundMusic.playbackRate = 1;
+
+  function updateMusicToggle() {
+    const playing = !backgroundMusic.paused && !backgroundMusic.ended;
+    musicToggle.classList.toggle("is-playing", playing);
+    musicToggle.setAttribute("aria-pressed", String(playing));
+    musicToggle.setAttribute("aria-label", playing ? "Pause background music" : "Play background music");
+  }
+
+  function startBackgroundMusic() {
+    if (!wantsMusic || !backgroundMusic.paused) return;
+    backgroundMusic.play().catch(() => {});
+  }
+
+  function startMusicOnInteraction(event) {
+    if (event.target.closest?.("#music-toggle")) return;
+    startBackgroundMusic();
+  }
+
+  // Audible autoplay may need the first tap or key press to unlock playback.
+  document.addEventListener("pointerdown", startMusicOnInteraction, { passive: true });
+  document.addEventListener("keydown", startMusicOnInteraction);
+  musicToggle.addEventListener("click", () => {
+    if (!backgroundMusic.paused) {
+      wantsMusic = false;
+      backgroundMusic.pause();
+    } else {
+      wantsMusic = true;
+      startBackgroundMusic();
+    }
+  });
+  backgroundMusic.addEventListener("playing", updateMusicToggle);
+  backgroundMusic.addEventListener("pause", updateMusicToggle);
+
+  // Let the spoken audio in our videos remain easy to hear.
+  function balanceMusicWithVideos() {
+    const playingVideo = [...document.querySelectorAll("video")].some((video) => !video.paused && !video.ended && !video.muted && video.volume > 0);
+    backgroundMusic.volume = playingVideo ? 0.035 : musicVolume;
+  }
+  document.querySelectorAll("video").forEach((video) => {
+    ["play", "pause", "ended", "volumechange"].forEach((eventName) => video.addEventListener(eventName, balanceMusicWithVideos));
+  });
+  startBackgroundMusic();
+
   function fillPersonalText() {
     document.title = `For ${config.herName}, with love`;
     document.querySelectorAll("[data-her-name]").forEach((element) => {
@@ -877,7 +927,7 @@
   storyNext.addEventListener("click", () => showStoryPage(storyIndex + 1));
 
   document.addEventListener("keydown", (event) => {
-    if (currentScene !== "final") return;
+    if (currentScene !== "final" || document.getElementById("uppies-photo-dialog").open) return;
     if (event.key === "ArrowRight" && storyIndex < storyPages.length - 1) {
       event.preventDefault();
       showStoryPage(storyIndex + 1);
@@ -1027,14 +1077,43 @@
     if (!storyThreadGame.hidden && !pullingThread && !threadStage.classList.contains("complete")) renderThread();
   });
 
-  document.getElementById("uppies-yes").addEventListener("click", () => {
-    document.getElementById("uppies-answers").hidden = true;
-    document.getElementById("uppies-answer").textContent = config.successMessage;
+  const uppiesPhotoDialog = document.getElementById("uppies-photo-dialog");
+  const uppiesPhoto = document.getElementById("uppies-photo");
+  const uppiesPhotoCaption = document.getElementById("uppies-photo-caption");
+  let uppiesPhotoTrigger = null;
+
+  function showUppiesPhoto(trigger, src, alt) {
+    uppiesPhotoTrigger = trigger;
+    uppiesPhoto.src = src;
+    uppiesPhoto.alt = alt;
+    uppiesPhotoCaption.textContent = config.photoCaption;
+    uppiesPhotoDialog.showModal();
+  }
+
+  document.getElementById("uppies-yes").addEventListener("click", (event) => {
+    showUppiesPhoto(
+      event.currentTarget,
+      "images/web/yes.jpg",
+      "Emma kissing Pritesh on the cheek"
+    );
     throwStoryConfetti();
   });
-  document.getElementById("uppies-later").addEventListener("click", () => {
-    document.getElementById("uppies-answers").hidden = true;
-    document.getElementById("uppies-answer").textContent = "A hug saved for whenever you’re ready. ♥";
+  document.getElementById("uppies-later").addEventListener("click", (event) => {
+    showUppiesPhoto(
+      event.currentTarget,
+      "images/web/the-hug.jpg",
+      "Pritesh hugging Emma and kissing her cheek on the beach"
+    );
+  });
+  uppiesPhotoDialog.addEventListener("close", () => {
+    uppiesPhotoTrigger?.focus({ preventScroll: true });
+  });
+  uppiesPhotoDialog.addEventListener("click", (event) => {
+    if (event.target !== uppiesPhotoDialog) return;
+    const rect = uppiesPhotoDialog.getBoundingClientRect();
+    if (event.clientX < rect.left || event.clientX > rect.right || event.clientY < rect.top || event.clientY > rect.bottom) {
+      uppiesPhotoDialog.close();
+    }
   });
 
   showStoryPage(0);
