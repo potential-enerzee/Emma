@@ -47,7 +47,9 @@
     progressFill.style.width = `${(step / 5) * 100}%`;
 
     if (sceneId === "scratch") window.setTimeout(setupScratchCard, 80);
-    nextScene.querySelector("h1, h2")?.focus({ preventScroll: true });
+    const heading = nextScene.querySelector(".story-page.active h2, h1, h2");
+    heading?.setAttribute("tabindex", "-1");
+    heading?.focus({ preventScroll: true });
   }
 
   document.querySelectorAll("[data-go]").forEach((button) => {
@@ -793,7 +795,7 @@
     holding = true;
     holdStart = performance.now();
     holdButton.classList.add("holding");
-    holdButton.setPointerCapture?.(event.pointerId);
+    if (event.pointerId !== undefined) holdButton.setPointerCapture?.(event.pointerId);
     holdFrame = requestAnimationFrame(updateHold);
   }
 
@@ -829,7 +831,7 @@
   });
   holdButton.addEventListener("keyup", cancelHold);
 
-  // Post-unlock story
+  // Our animated adventure
   const storyPagesWrap = document.getElementById("story-pages");
   const storyPages = [...document.querySelectorAll(".story-page")];
   const storyCount = document.getElementById("story-count");
@@ -853,6 +855,7 @@
   let storyIndex = 0;
 
   function showStoryPage(index) {
+    if (pullingThread) endThreadPull();
     storyIndex = Math.max(0, Math.min(storyPages.length - 1, index));
     storyPages.forEach((page, pageIndex) => {
       page.classList.toggle("active", pageIndex === storyIndex);
@@ -865,9 +868,9 @@
     storyNext.hidden = storyIndex === storyPages.length - 1;
     storyNextLabel.textContent = page.dataset.next || "Continue";
     storyPagesWrap.scrollTop = 0;
-    const heading = page.querySelector("h2");
-    heading.setAttribute("tabindex", "-1");
-    heading.focus({ preventScroll: true });
+    const heading = [...page.querySelectorAll("h2, h3")].find((element) => element.getClientRects().length);
+    heading?.setAttribute("tabindex", "-1");
+    if (currentScene === "final") heading?.focus({ preventScroll: true });
   }
 
   storyBack.addEventListener("click", () => showStoryPage(storyIndex - 1));
@@ -883,33 +886,6 @@
       event.preventDefault();
       showStoryPage(storyIndex - 1);
     }
-  });
-
-  const loopNotes = [
-    "A small moment leaves me feeling disconnected.",
-    "Instead of saying it, I quietly pull back.",
-    "That distance can feel like care disappearing.",
-    "Frustration grows, I misunderstand it, and the loop starts again.",
-  ];
-  document.querySelectorAll("[data-loop-step]").forEach((step) => {
-    step.addEventListener("click", () => {
-      document.querySelectorAll("[data-loop-step]").forEach((item) => item.classList.remove("active"));
-      step.classList.add("active");
-      document.getElementById("loop-note").textContent = loopNotes[Number(step.dataset.loopStep)];
-      navigator.vibrate?.(18);
-    });
-  });
-
-  document.querySelectorAll(".truth-card").forEach((card) => {
-    card.addEventListener("click", () => {
-      const willOpen = !card.classList.contains("open");
-      document.querySelectorAll(".truth-card").forEach((item) => {
-        item.classList.remove("open");
-        item.setAttribute("aria-expanded", "false");
-      });
-      card.classList.toggle("open", willOpen);
-      card.setAttribute("aria-expanded", String(willOpen));
-    });
   });
 
   let threadProgress = 0;
@@ -956,10 +932,13 @@
     renderThread();
     threadPull.classList.remove("pulling");
     threadStage.classList.add("complete");
+    storyThreadGame.classList.add("complete");
     threadSuccess.classList.add("visible");
     threadHeading.hidden = true;
     threadInstruction.textContent = "Together at last ♥";
     storyFinalReveal.hidden = false;
+    threadPull.disabled = true;
+    document.getElementById("uppies-question").focus({ preventScroll: true });
     navigator.vibrate?.([50, 45, 50, 45, 100]);
     throwStoryConfetti();
     window.setTimeout(() => storyFinalReveal.scrollIntoView({ behavior: "smooth", block: "nearest" }), 450);
@@ -1019,7 +998,7 @@
     threadPullDistance = 0;
     renderThread();
     threadInstruction.textContent = threadProgress > 0
-      ? "Pull again. Don't let them drift apart"
+      ? "A little closer. Pull again and hold ♥"
       : "Pull the heart down and hold it tight";
   }
 
@@ -1035,6 +1014,9 @@
   threadPull.addEventListener("pointermove", moveThreadPull);
   threadPull.addEventListener("pointerup", endThreadPull);
   threadPull.addEventListener("pointercancel", endThreadPull);
+  threadPull.addEventListener("lostpointercapture", endThreadPull);
+  threadPull.addEventListener("blur", endThreadPull);
+  window.addEventListener("blur", () => endThreadPull());
   threadPull.addEventListener("keydown", (event) => {
     if ((event.key === " " || event.key === "Enter") && !event.repeat) beginThreadPull(event, true);
   });
@@ -1043,6 +1025,16 @@
   });
   window.addEventListener("resize", () => {
     if (!storyThreadGame.hidden && !pullingThread && !threadStage.classList.contains("complete")) renderThread();
+  });
+
+  document.getElementById("uppies-yes").addEventListener("click", () => {
+    document.getElementById("uppies-answers").hidden = true;
+    document.getElementById("uppies-answer").textContent = config.successMessage;
+    throwStoryConfetti();
+  });
+  document.getElementById("uppies-later").addEventListener("click", () => {
+    document.getElementById("uppies-answers").hidden = true;
+    document.getElementById("uppies-answer").textContent = "A hug saved for whenever you’re ready. ♥";
   });
 
   showStoryPage(0);

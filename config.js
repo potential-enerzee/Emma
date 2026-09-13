@@ -64,7 +64,7 @@ window.LOVE_STORY = {
     ],
   },
 
-  finalQuestion: "Will you be my travel companion and let’s explore more things together?",
-  finalNote: "I promise snacks, bad jokes, and a whole lot of love.",
-  successMessage: "Best answer ever.",
+  finalQuestion: "Do you want uppies this time?",
+  finalNote: "My turn to catch you. ♥",
+  successMessage: "One legendary hug, coming right up. ♥",
 };
