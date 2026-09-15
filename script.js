@@ -1,6 +1,9 @@
 (function () {
   "use strict";
 
+  // The full interactive story is preserved, but paused while the note is live.
+  if (document.body.classList.contains("note-mode")) return;
+
   const config = window.LOVE_STORY;
   const scenes = [...document.querySelectorAll(".scene")];
   const progressLabel = document.querySelector(".progress-label");

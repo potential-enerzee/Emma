@@ -13,6 +13,367 @@
   --ease: cubic-bezier(0.22, 1, 0.36, 1);
 }
 
+/*
+ * Temporary note mode
+ * -------------------
+ * The original experience remains untouched below. Remove `note-mode` from
+ * <body> (and hidden/aria-hidden/inert from #app) when it is time to bring it back.
+ */
+.note-mode {
+  min-height: 100vh;
+  overflow-x: hidden;
+  overflow-y: auto;
+  background: #f4ede5;
+}
+
+.note-mode > .noise,
+.note-mode > .ambient,
+.note-mode > audio,
+.note-mode > .app,
+.note-mode > .uppies-photo-dialog,
+.note-mode > noscript {
+  display: none !important;
+}
+
+.letter-page {
+  --letter-ink: #302a28;
+  --letter-muted: #756963;
+  --letter-wine: #9b4f4d;
+  --letter-blush: #dfb8ad;
+  position: relative;
+  isolation: isolate;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  min-height: 100svh;
+  overflow: hidden;
+  padding: 26px clamp(24px, 5vw, 76px) 22px;
+  color: var(--letter-ink);
+  background:
+    linear-gradient(rgba(255, 255, 255, 0.22), rgba(255, 255, 255, 0)),
+    #f4ede5;
+}
+
+.letter-page::before {
+  position: absolute;
+  z-index: -2;
+  inset: 0;
+  opacity: 0.22;
+  pointer-events: none;
+  content: "";
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 180 180' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='paper'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.72' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23paper)' opacity='.12'/%3E%3C/svg%3E");
+}
+
+.letter-glow {
+  position: absolute;
+  z-index: -1;
+  border-radius: 999px;
+  filter: blur(2px);
+  pointer-events: none;
+}
+
+.letter-glow-one {
+  top: -20vw;
+  right: -14vw;
+  width: min(48vw, 720px);
+  aspect-ratio: 1;
+  background: radial-gradient(circle, rgba(218, 160, 147, 0.27), rgba(218, 160, 147, 0));
+}
+
+.letter-glow-two {
+  bottom: -28vw;
+  left: -18vw;
+  width: min(60vw, 820px);
+  aspect-ratio: 1;
+  background: radial-gradient(circle, rgba(218, 187, 141, 0.24), rgba(218, 187, 141, 0));
+}
+
+.letter-masthead {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  width: 100%;
+  max-width: 1360px;
+  margin: 0 auto;
+  color: var(--letter-muted);
+}
+
+.letter-brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 11px;
+  color: var(--letter-ink);
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.19em;
+  text-decoration: none;
+  text-transform: uppercase;
+}
+
+.letter-brand-mark {
+  display: grid;
+  width: 34px;
+  height: 34px;
+  place-items: center;
+  color: #fffaf5;
+  background: var(--letter-wine);
+  border-radius: 50% 50% 47% 53% / 44% 55% 45% 56%;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 18px;
+  font-style: italic;
+  font-weight: 400;
+  letter-spacing: 0;
+  text-transform: none;
+  transform: rotate(-5deg);
+}
+
+.letter-masthead-rule {
+  height: 1px;
+  flex: 1;
+  background: rgba(48, 42, 40, 0.15);
+}
+
+.letter-masthead p {
+  margin: 0;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 13px;
+  font-style: italic;
+}
+
+.letter-layout {
+  display: grid;
+  grid-template-columns: minmax(300px, 0.78fr) minmax(520px, 1.15fr);
+  align-items: center;
+  gap: clamp(52px, 8vw, 130px);
+  width: min(100%, 1250px);
+  margin: auto;
+  padding: 40px 0 28px;
+}
+
+.letter-opening {
+  position: relative;
+  max-width: 490px;
+  animation: letterIntroIn 0.9s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.letter-kicker {
+  margin: 0 0 22px;
+  color: var(--letter-wine);
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.23em;
+  text-transform: uppercase;
+}
+
+.letter-opening h1 {
+  color: var(--letter-ink);
+  font-size: clamp(66px, 7.2vw, 112px);
+  letter-spacing: -0.06em;
+  line-height: 0.9;
+}
+
+.letter-opening h1 em {
+  display: inline-block;
+  color: var(--letter-wine);
+  font-weight: 400;
+}
+
+.letter-opening h1 em::after {
+  right: -0.02em;
+  bottom: -0.08em;
+  left: 0;
+  height: 0.045em;
+  background: currentColor;
+  opacity: 0.48;
+  transform: rotate(-1.2deg);
+}
+
+.letter-promise {
+  max-width: 410px;
+  margin: 34px 0 0;
+  color: var(--letter-muted);
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: clamp(19px, 1.8vw, 25px);
+  line-height: 1.5;
+}
+
+.letter-flourish {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 115px;
+  margin-top: 30px;
+  color: var(--letter-wine);
+}
+
+.letter-flourish span {
+  width: 68px;
+  height: 1px;
+  background: currentColor;
+  opacity: 0.45;
+}
+
+.letter-flourish b {
+  font-family: Georgia, serif;
+  font-size: 15px;
+  font-weight: 400;
+  transform: rotate(-7deg);
+}
+
+.letter-card {
+  position: relative;
+  width: 100%;
+  max-width: 700px;
+  justify-self: end;
+  padding: clamp(38px, 4.2vw, 64px) clamp(34px, 5vw, 72px) clamp(36px, 4vw, 58px);
+  overflow: hidden;
+  background: rgba(255, 252, 248, 0.94);
+  border: 1px solid rgba(77, 57, 51, 0.1);
+  border-radius: 4px 4px 22px 4px;
+  box-shadow:
+    0 30px 80px rgba(83, 58, 48, 0.13),
+    0 3px 12px rgba(83, 58, 48, 0.06);
+  animation: letterCardIn 1s cubic-bezier(0.22, 1, 0.36, 1) 0.08s both;
+}
+
+.letter-card::before {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 21px;
+  width: 1px;
+  content: "";
+  background: rgba(155, 79, 77, 0.17);
+}
+
+.letter-fold {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 54px;
+  height: 54px;
+  background: linear-gradient(225deg, #f4ede5 49%, #eadfd5 50%, #fffaf6 52%);
+  box-shadow: -3px 4px 8px rgba(76, 53, 45, 0.05);
+}
+
+.letter-salutation {
+  margin: 0 0 22px;
+  color: var(--letter-wine);
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: clamp(25px, 2.3vw, 34px);
+  font-style: italic;
+}
+
+.letter-copy {
+  color: #504744;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: clamp(15px, 1.08vw, 17px);
+  line-height: 1.67;
+}
+
+.letter-copy p {
+  margin: 0 0 15px;
+}
+
+.letter-copy p:last-child {
+  margin-bottom: 0;
+}
+
+.letter-aside {
+  color: var(--letter-wine);
+  font-style: italic;
+  white-space: nowrap;
+}
+
+.letter-signature {
+  position: static;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  margin-top: 27px;
+  bottom: auto;
+  color: var(--letter-muted);
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 14px;
+  font-style: italic;
+  font-weight: 400;
+  letter-spacing: normal;
+  text-transform: none;
+}
+
+.letter-signature strong {
+  margin-top: 3px;
+  color: var(--letter-ink);
+  font-family: "Segoe Script", "Bradley Hand", cursive;
+  font-size: 26px;
+  font-weight: 400;
+  transform: rotate(-2deg);
+}
+
+.letter-footnote {
+  margin: 0 auto;
+  color: rgba(80, 71, 68, 0.66);
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.17em;
+  line-height: 1.5;
+  text-align: center;
+  text-transform: uppercase;
+}
+
+@keyframes letterIntroIn {
+  from { opacity: 0; transform: translateY(18px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes letterCardIn {
+  from { opacity: 0; transform: translateY(22px) rotate(0.5deg); }
+  to { opacity: 1; transform: translateY(0) rotate(0); }
+}
+
+@media (max-width: 980px) {
+  .letter-page { padding: 22px clamp(18px, 5vw, 44px) 26px; }
+  .letter-layout {
+    grid-template-columns: 1fr;
+    gap: 40px;
+    width: min(100%, 720px);
+    padding: 64px 0 42px;
+  }
+  .letter-opening { max-width: 610px; }
+  .letter-opening h1 { font-size: clamp(64px, 13vw, 104px); }
+  .letter-card { max-width: none; }
+}
+
+@media (max-width: 620px) {
+  .letter-page { padding: 18px 14px 22px; }
+  .letter-masthead { padding: 0 4px; }
+  .letter-masthead-rule { display: none; }
+  .letter-masthead p { margin-left: auto; font-size: 11px; }
+  .letter-layout { gap: 31px; padding: 58px 0 34px; }
+  .letter-opening { padding: 0 11px; }
+  .letter-kicker { margin-bottom: 17px; font-size: 9px; }
+  .letter-opening h1 { font-size: clamp(54px, 17vw, 78px); }
+  .letter-promise { margin-top: 26px; font-size: 19px; }
+  .letter-flourish { margin-top: 23px; }
+  .letter-card {
+    padding: 37px 28px 38px 34px;
+    border-radius: 3px 3px 18px 3px;
+  }
+  .letter-card::before { left: 16px; }
+  .letter-fold { width: 42px; height: 42px; }
+  .letter-salutation { margin-bottom: 19px; font-size: 27px; }
+  .letter-copy { font-size: 15.5px; line-height: 1.65; }
+  .letter-copy p { margin-bottom: 16px; }
+  .letter-aside { white-space: normal; }
+  .letter-footnote { max-width: 310px; font-size: 8px; }
+}
+
+@media (max-width: 370px) {
+  .letter-masthead p { display: none; }
+  .letter-layout { padding-top: 48px; }
+  .letter-card { padding-right: 24px; padding-left: 30px; }
+}
+
 * {
   box-sizing: border-box;
 }

@@ -3,25 +3,107 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="theme-color" content="#f8eee8" />
+    <meta name="theme-color" content="#f4ede5" />
     <meta
       name="description"
-      content="A tiny interactive love story, made especially for someone wonderful."
+      content="A sincere note of gratitude for Emma."
     />
-    <title>A little something for you</title>
+    <title>A note for Emma</title>
     <link rel="stylesheet" href="styles.css" />
     <link rel="stylesheet" href="adventure.css" />
   </head>
-  <body>
+  <body class="note-mode">
+    <main class="letter-page" aria-labelledby="letter-title">
+      <div class="letter-glow letter-glow-one" aria-hidden="true"></div>
+      <div class="letter-glow letter-glow-two" aria-hidden="true"></div>
+
+      <header class="letter-masthead">
+        <a class="letter-brand" href="#letter" aria-label="Read the note for Emma">
+          <span class="letter-brand-mark" aria-hidden="true">E</span>
+          <span>For Emma</span>
+        </a>
+        <span class="letter-masthead-rule" aria-hidden="true"></span>
+        <p>A small note, honestly meant</p>
+      </header>
+
+      <div class="letter-layout" id="letter">
+        <section class="letter-opening">
+          <p class="letter-kicker">Something I should have said better</p>
+          <h1 id="letter-title">One thing I hope<br /><em>you know.</em></h1>
+          <p class="letter-promise">
+            You made a real and positive difference in my life.
+          </p>
+          <div class="letter-flourish" aria-hidden="true">
+            <span></span>
+            <b>♥</b>
+          </div>
+        </section>
+
+        <article class="letter-card" aria-label="A message from Pritesh to Emma">
+          <span class="letter-fold" aria-hidden="true"></span>
+          <p class="letter-salutation">Hey Emma,</p>
+
+          <div class="letter-copy">
+            <p>
+              If you ever happen to find this page, there’s one thing I hope it
+              leaves you with: you made a real and positive difference in my life.
+            </p>
+            <p>
+              Looking back, I can see that I often reacted with anger and tried to
+              reason my way through feelings I hadn’t yet understood. I’m sorry for
+              responding that way and for the hurt it caused. I was going through
+              more internally than I realized, including struggles with my
+              health. Still, that doesn’t excuse how I responded.
+            </p>
+            <p>
+              What you did gave me the space and the push to finally look inward. I
+              faced feelings I had avoided, began taking better care of my health,
+              and started finding the part of myself I had slowly lost over time. I
+              may not have reached that understanding without you.
+            </p>
+            <p>
+              I also see something I should have recognized sooner: you are
+              thoughtful, capable, and remarkably good at handling difficult
+              things. I wish I had listened more and trusted that, instead of always
+              reaching for one more “logical” explanation. <span class="letter-aside">Sometimes useful;
+              sometimes complete nonsense.</span>
+            </p>
+            <p>
+              Thank you for your patience, for what you helped me see, and for the
+              part you played in helping me find myself again. I’m genuinely happy
+              about the growth that came from all of this, and genuinely grateful
+              to you.
+            </p>
+            <p>
+              You don’t need to respond or do anything with this. I simply wanted
+              you to know that I see it now, and I truly appreciate you.
+            </p>
+          </div>
+
+          <footer class="letter-signature">
+            <span>With genuine gratitude,</span>
+            <strong>Pritesh</strong>
+          </footer>
+        </article>
+      </div>
+
+      <p class="letter-footnote">No ask. No expectation. Just something true I wanted you to know.</p>
+    </main>
+
+    <!--
+      The original interactive experience is preserved below. To restore it,
+      remove "note-mode" from the body class and remove hidden/aria-hidden/inert
+      from #app.
+    -->
     <div class="noise" aria-hidden="true"></div>
     <div class="ambient ambient-one" aria-hidden="true"></div>
     <div class="ambient ambient-two" aria-hidden="true"></div>
 
-    <audio id="background-music" autoplay loop preload="metadata" aria-hidden="true">
+    <audio id="background-music" loop preload="metadata" aria-hidden="true">
       <source src="song/Fleetwood Mac - Everywhere Official Music Video.mp3" type="audio/mpeg" />
     </audio>
 
-    <main class="app" id="app">
+    <main class="app" id="app" aria-hidden="true" inert hidden>
       <header class="topbar">
         <a class="brand" href="#" aria-label="Start over">
           <span class="brand-mark">E</span>
