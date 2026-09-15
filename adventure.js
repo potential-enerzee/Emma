@@ -14,12 +14,16 @@
       ? '<g class="hello-arm"><path d="M-20-76Q-46-95-41-126"/></g><path d="M20-76Q40-66 37-47"/>'
       : pose === "dine"
         ? '<path d="M-20-76q-24 22-15 39"/><g class="dining-arm"><path d="M20-76q30 11 15-17"/><path d="M35-94l8-13" stroke="#9b9990" stroke-width="3"/><ellipse cx="46" cy="-111" rx="4" ry="7" fill="#c9c7b8" stroke="#9b9990" stroke-width="1.5" transform="rotate(30 46 -111)"/></g>'
-        : '<path d="M-20-76q-17 11-20 33M20-76q17 11 20 33"/>';
+        : pose === "run"
+          ? '<path class="runner-arm arm-left" d="M-20-76q-22 3-32 23l-17-9"/><path class="runner-arm arm-right" d="M20-76q19 7 27 25l16 5"/>'
+          : '<path d="M-20-76q-17 11-20 33M20-76q17 11 20 33"/>';
+    const lowerBody = pose === "run"
+      ? '<g class="run-leg run-leg-left" fill="none"><path d="M-12-30-31-8" stroke="#4b5559" stroke-width="12"/><path d="M-31-7h-14" stroke="#463e39" stroke-width="8"/></g><g class="run-leg run-leg-right" fill="none"><path d="M12-30 29-12" stroke="#4b5559" stroke-width="12"/><path d="M29-11h14" stroke="#463e39" stroke-width="8"/></g>'
+      : '<g stroke="#4b5559" stroke-width="12" fill="none"><path class="couple-leg leg-left" d="M-12-30-16-5"/><path class="couple-leg leg-right" d="M12-30 16-5"/></g><g stroke="#463e39" stroke-width="8"><path d="M-17-3h-10m43 0h10"/></g>';
     return `<g transform="translate(${x} ${y}) scale(${scale})"><g class="couple-person person-${who} pose-${pose}">
       ${!isP ? `<path d="M-28-110q-7-43 28-43t28 43l5 47q-20 12-34-5-16 15-33 4Z" fill="${hair}"/>` : ""}
       ${pose === "hike" ? '<rect x="-35" y="-83" width="28" height="51" rx="11" fill="#d8a75b"/><path d="M-29-78v32" stroke="#b88645"/>' : ""}
-      <g stroke="#4b5559" stroke-width="12" fill="none"><path class="couple-leg leg-left" d="M-12-30-16-5"/><path class="couple-leg leg-right" d="M12-30 16-5"/></g>
-      <g stroke="#463e39" stroke-width="8"><path d="M-17-3h-10m43 0h10"/></g>
+      ${lowerBody}
       <path d="M-21-83q21-10 42 0l5 57h-52Z" fill="${shirt}"/>
       ${isP ? '<path d="M-11-81q11 14 22 0M-9-66v17m18-17v17" fill="none" stroke="#a3b6a3" stroke-width="2"/>' : '<path d="M-11-84q11 12 22 0" fill="none" stroke="#e8afbd" stroke-width="3"/>'}
       <g stroke="${skin}" stroke-width="10" fill="none">${arms}</g>
@@ -144,6 +148,32 @@
       </g>
       <g class="music-notes" fill="#8b9b79" font-family="Georgia, serif" font-size="27"><text x="543" y="188">♪</text><text x="573" y="158">♫</text></g>
       ${heart(383, 132, .65)}`,
+
+    sunsetRun: `<defs>
+        <linearGradient id="sunset-run-sky" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#8e9cbc"/><stop offset=".48" stop-color="#eab49b"/><stop offset="1" stop-color="#f5d39c"/></linearGradient>
+        <linearGradient id="sunset-run-hill" x1="0" y1="0" x2="1" y2=".2"><stop stop-color="#587360"/><stop offset="1" stop-color="#84926a"/></linearGradient>
+      </defs>
+      <rect width="760" height="400" fill="url(#sunset-run-sky)"/>
+      <circle class="sunset-sun" cx="606" cy="112" r="52" fill="#ffe5a5" opacity=".94"/>
+      <path d="M0 170q104-18 211 1t203-2q101-17 346 8v106H0Z" fill="#779ca2" opacity=".9"/>
+      <g class="sunset-waves" fill="none" stroke="#dce5dc" stroke-width="3" opacity=".65"><path d="M0 201q48-11 96 0t96 0t96 0t96 0t96 0t96 0t96 0t96 0"/><path d="M-25 229q51-10 102 0t102 0t102 0t102 0t102 0t102 0t102 0"/></g>
+      <path d="M0 400V305q118-66 260-45 153 22 240-24 128-68 260-31v195Z" fill="url(#sunset-run-hill)"/>
+      <path d="M80 400q128-81 254-73 119 8 225-91" fill="none" stroke="#c9af85" stroke-width="47" opacity=".88"/>
+      <path d="M82 400q127-71 253-64 122 8 231-96" fill="none" stroke="#e2c89e" stroke-width="3" stroke-dasharray="8 13" opacity=".7"/>
+      <g class="hill-grass grass-back" fill="none" stroke="#405f51" stroke-width="4" opacity=".75">
+        <path d="M29 339q2-39-9-63m10 60q13-32 26-45m-2 77q1-43-11-77m17 67q14-30 30-42M124 304q0-38-17-62m20 58q12-36 30-55m35 34q-3-39-20-65m22 61q11-36 25-56M625 279q-1-39-17-67m21 62q12-35 28-55m44 66q0-45-18-73m21 68q12-35 29-55m-5 87q6-38 25-62"/>
+      </g>
+      <g class="chase-motion" fill="none" stroke="#fff2d0" stroke-width="4" opacity=".8"><path d="M246 206h55M225 226h69M453 165h44"/></g>
+      ${person(360, 337, "p", "run", 1.17)}
+      ${person(525, 269, "e", "run", .98)}
+      <g class="hill-grass grass-front" fill="none" stroke="#365647" stroke-width="5">
+        <path d="M15 405q6-55-12-96m18 92q16-47 34-70m20 77q-3-57-25-94m32 89q15-42 35-67m80 67q1-49-19-83m25 79q13-43 32-69m83 70q0-39-15-65m24 61q10-35 29-59m233 65q1-53-18-89m25 85q17-48 38-73m55 76q0-50-17-88m23 83q16-43 34-65m24 69q2-41-12-71"/>
+      </g>
+      <g class="chase-caption" font-family="Georgia, serif" font-style="italic">
+        <g><rect x="211" y="112" width="137" height="39" rx="19" fill="#fff8e8" opacity=".92"/><path d="m311 147 13 14-2-18" fill="#fff8e8" opacity=".92"/><text x="279" y="137" fill="#745e55" text-anchor="middle" font-size="17">wait for me!</text></g>
+        <g><rect x="398" y="48" width="170" height="39" rx="19" fill="#fff8e8" opacity=".92"/><path d="m501 84 12 15 1-18" fill="#fff8e8" opacity=".92"/><text x="483" y="73" fill="#745e55" text-anchor="middle" font-size="15">sunset this way →</text></g>
+      </g>
+      ${heart(451, 114, .48)}`,
   };
 
   document.querySelectorAll("[data-adventure-art]").forEach((stage) => {
