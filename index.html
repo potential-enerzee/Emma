@@ -37,6 +37,26 @@
             <span></span>
             <b>♥</b>
           </div>
+
+          <button
+            class="letter-music"
+            id="letter-music-toggle"
+            type="button"
+            aria-label="Play Everywhere by Fleetwood Mac"
+            aria-pressed="false"
+          >
+            <span class="letter-music-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" role="presentation">
+                <path class="letter-play-icon" d="M9 7.5v9l7-4.5z" />
+                <path class="letter-pause-icon" d="M9 8v8M15 8v8" />
+              </svg>
+            </span>
+            <span class="letter-music-copy">
+              <small>A song for this note</small>
+              <strong>Everywhere <i>·</i> Fleetwood Mac</strong>
+            </span>
+            <span class="letter-music-state" id="letter-music-state" aria-live="polite">Play</span>
+          </button>
         </section>
 
         <article class="letter-card" aria-label="A message from Pritesh to Emma">
