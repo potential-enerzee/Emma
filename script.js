@@ -1,40 +1,40 @@
 (function () {
   "use strict";
 
-  // The full interactive story is preserved, but only the note's music player
-  // is active while the temporary note is live.
-  if (document.body.classList.contains("note-mode")) {
-    const noteMusic = document.getElementById("background-music");
-    const noteMusicToggle = document.getElementById("letter-music-toggle");
-    const noteMusicState = document.getElementById("letter-music-state");
-    const noteMusicVolume = 0.16;
+  // The full interactive story is preserved, but only this invitation's music
+  // player is active while the GIF scene is live.
+  if (document.body.classList.contains("kid-mode")) {
+    const inviteMusic = document.getElementById("background-music");
+    const inviteMusicToggle = document.getElementById("invite-music-toggle");
+    const inviteMusicState = document.getElementById("invite-music-state");
+    const inviteMusicVolume = 0.16;
 
-    noteMusic.volume = noteMusicVolume;
+    inviteMusic.volume = inviteMusicVolume;
 
-    function updateNoteMusic() {
-      const isPlaying = !noteMusic.paused && !noteMusic.ended;
-      noteMusicToggle.classList.toggle("is-playing", isPlaying);
-      noteMusicToggle.setAttribute("aria-pressed", String(isPlaying));
-      noteMusicToggle.setAttribute(
+    function updateInviteMusic() {
+      const isPlaying = !inviteMusic.paused && !inviteMusic.ended;
+      inviteMusicToggle.classList.toggle("is-playing", isPlaying);
+      inviteMusicToggle.setAttribute("aria-pressed", String(isPlaying));
+      inviteMusicToggle.setAttribute(
         "aria-label",
         `${isPlaying ? "Pause" : "Play"} Everywhere by Fleetwood Mac`
       );
-      noteMusicState.textContent = isPlaying ? "Pause" : "Play";
+      inviteMusicState.textContent = isPlaying ? "Pause" : "Play";
     }
 
-    noteMusicToggle.addEventListener("click", () => {
-      if (noteMusic.paused) {
-        noteMusic.play().catch(() => {
-          noteMusicState.textContent = "Try again";
+    inviteMusicToggle.addEventListener("click", () => {
+      if (inviteMusic.paused) {
+        inviteMusic.play().catch(() => {
+          inviteMusicState.textContent = "Try again";
         });
       } else {
-        noteMusic.pause();
+        inviteMusic.pause();
       }
     });
-    noteMusic.addEventListener("playing", updateNoteMusic);
-    noteMusic.addEventListener("pause", updateNoteMusic);
-    noteMusic.addEventListener("ended", updateNoteMusic);
-    updateNoteMusic();
+    inviteMusic.addEventListener("playing", updateInviteMusic);
+    inviteMusic.addEventListener("pause", updateInviteMusic);
+    inviteMusic.addEventListener("ended", updateInviteMusic);
+    updateInviteMusic();
     return;
   }
 

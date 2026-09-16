@@ -6,113 +6,66 @@
     <meta name="theme-color" content="#f4ede5" />
     <meta
       name="description"
-      content="A sincere note of gratitude for Emma."
+      content="A little animated invitation for Emma."
     />
-    <title>A note for Emma</title>
+    <title>Come to me, sweetheart!</title>
     <link rel="stylesheet" href="styles.css" />
     <link rel="stylesheet" href="adventure.css" />
   </head>
-  <body class="note-mode">
-    <main class="letter-page" aria-labelledby="letter-title">
-      <div class="letter-glow letter-glow-one" aria-hidden="true"></div>
-      <div class="letter-glow letter-glow-two" aria-hidden="true"></div>
+  <body class="kid-mode">
+    <main class="invite-page" aria-labelledby="invite-line">
+      <div class="invite-glow invite-glow-one" aria-hidden="true"></div>
+      <div class="invite-glow invite-glow-two" aria-hidden="true"></div>
 
-      <header class="letter-masthead">
-        <a class="letter-brand" href="#letter" aria-label="Read the note for Emma">
-          <span class="letter-brand-mark" aria-hidden="true">E</span>
-          <span>For Emma</span>
-        </a>
-        <span class="letter-masthead-rule" aria-hidden="true"></span>
-        <p>A small note, honestly meant</p>
-      </header>
+      <button
+        class="invite-music"
+        id="invite-music-toggle"
+        type="button"
+        aria-label="Play Everywhere by Fleetwood Mac"
+        aria-pressed="false"
+      >
+        <span class="invite-music-icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24" role="presentation">
+            <path class="invite-play-icon" d="M9 7.5v9l7-4.5z" />
+            <path class="invite-pause-icon" d="M9 8v8M15 8v8" />
+          </svg>
+        </span>
+        <span class="invite-music-copy">
+          <strong>Everywhere <i>·</i> Fleetwood Mac</strong>
+        </span>
+        <span class="invite-music-state" id="invite-music-state" aria-live="polite">Play</span>
+      </button>
 
-      <div class="letter-layout" id="letter">
-        <section class="letter-opening">
-          <p class="letter-kicker">Something I should have said better</p>
-          <h1 id="letter-title">One thing I hope<br /><em>you know.</em></h1>
-          <p class="letter-promise">
-            You made a real and positive difference in my life.
-          </p>
-          <div class="letter-flourish" aria-hidden="true">
-            <span></span>
-            <b>♥</b>
+      <section class="invite-scene">
+        <div class="speech-wrap">
+          <div class="speech-bubble">
+            <span class="speech-spark" aria-hidden="true">✦</span>
+            <h1 id="invite-line">
+              <span>Come to me,</span>
+              <em>sweetheart!!!</em>
+            </h1>
+            <span class="speech-tail" aria-hidden="true"></span>
           </div>
+        </div>
 
-          <button
-            class="letter-music"
-            id="letter-music-toggle"
-            type="button"
-            aria-label="Play Everywhere by Fleetwood Mac"
-            aria-pressed="false"
-          >
-            <span class="letter-music-icon" aria-hidden="true">
-              <svg viewBox="0 0 24 24" role="presentation">
-                <path class="letter-play-icon" d="M9 7.5v9l7-4.5z" />
-                <path class="letter-pause-icon" d="M9 8v8M15 8v8" />
-              </svg>
-            </span>
-            <span class="letter-music-copy">
-              <small>A song for this note</small>
-              <strong>Everywhere <i>·</i> Fleetwood Mac</strong>
-            </span>
-            <span class="letter-music-state" id="letter-music-state" aria-live="polite">Play</span>
-          </button>
-        </section>
-
-        <article class="letter-card" aria-label="A message from Pritesh to Emma">
-          <span class="letter-fold" aria-hidden="true"></span>
-          <p class="letter-salutation">Hey Emma,</p>
-
-          <div class="letter-copy">
-            <p>
-              If you ever happen to find this page, there’s one thing I hope it
-              leaves you with: you made a real and positive difference in my life.
-            </p>
-            <p>
-              Looking back, I can see that I didn’t always respond in the best way and tried to
-              reason my way through feelings I hadn’t yet understood. I’m sorry for
-              responding that way and for the hurt it caused. I was going through
-              more internally than I realized, including struggles with my
-              health. Still, that doesn’t excuse how I responded.
-            </p>
-            <p>
-              What you did gave me the space and the push to finally look inward. I
-              faced feelings I had avoided, began taking better care of my health,
-              and started finding the part of myself I had slowly lost over time. I
-              may not have reached that understanding without you.
-            </p>
-            <p>
-              I also see something I should have recognized sooner: you are
-              thoughtful, capable, and remarkably good at handling difficult
-              things. I wish I had listened more and trusted that, instead of always
-              reaching for one more “logical” explanation. <span class="letter-aside">Sometimes useful;
-              sometimes complete nonsense.</span>
-            </p>
-            <p>
-              Thank you for your patience, for what you helped me see, and for the
-              part you played in helping me find myself again. I’m genuinely happy
-              about the growth that came from all of this, and genuinely grateful
-              to you.
-            </p>
-            <p>
-              You don’t need to respond or do anything with this. I simply wanted
-              you to know that I see it now, and I truly appreciate you.
-            </p>
-          </div>
-
-          <footer class="letter-signature">
-            <span>With love and my sexy energy,</span>
-            <strong>Pritesh</strong>
-          </footer>
-        </article>
-      </div>
-
-      <p class="letter-footnote">No ask. No expectation. Just something true I wanted you to know.</p>
+        <div class="gif-stage" aria-label="An animated character holds out both hands and calls you closer">
+          <span class="floating-heart heart-one" aria-hidden="true">♥</span>
+          <span class="floating-heart heart-two" aria-hidden="true">♥</span>
+          <span class="floating-heart heart-three" aria-hidden="true">♥</span>
+          <span class="gif-spark spark-one" aria-hidden="true">✦</span>
+          <span class="gif-spark spark-two" aria-hidden="true">✦</span>
+          <img
+            class="welcome-gif"
+            src="Gif/source.gif"
+            alt="An animated character holding out both hands"
+          />
+        </div>
+      </section>
     </main>
 
     <!--
       The original interactive experience is preserved below. To restore it,
-      remove "note-mode" from the body class and remove hidden/aria-hidden/inert
+      remove "kid-mode" from the body class and remove hidden/aria-hidden/inert
       from #app.
     -->
     <div class="noise" aria-hidden="true"></div>
