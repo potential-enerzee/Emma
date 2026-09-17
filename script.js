@@ -7,9 +7,74 @@
     const inviteMusic = document.getElementById("background-music");
     const inviteMusicToggle = document.getElementById("invite-music-toggle");
     const inviteMusicState = document.getElementById("invite-music-state");
+    const gifStage = document.getElementById("gif-stage");
+    const welcomeGif = document.getElementById("welcome-gif");
+    const gifShuffle = document.getElementById("gif-shuffle");
     const inviteMusicVolume = 0.16;
+    const mediaItems = [
+      { src: "Gif/source.gif", shape: "landscape" },
+      { src: "Gif/Dog Lol GIF.gif", shape: "portrait" },
+      { src: "Gif/Sesame Street Kiss GIF.gif", shape: "landscape" },
+      { src: "Gif/Major League Soccer Flirt GIF by New York Red Bulls.gif", shape: "square" },
+      { src: "Gif/Hey Babe GIF.gif", shape: "square" },
+      { src: "Gif/Whats Up What GIF by MOODMAN.gif", shape: "landscape" },
+      { src: "Gif/Hi Babe Flirting GIF by MOODMAN.gif", shape: "square" },
+      { src: "Gif/Cat Thank You GIF.gif", shape: "landscape" },
+      { src: "Gif/kisses feel GIF.gif", shape: "portrait" },
+      { src: "Gif/Girl Love GIF by MOODMAN.gif", shape: "landscape" },
+      { src: "Gif/hey GIF.gif", shape: "landscape" },
+      { src: "Gif/Franks Hey Hot Stuff GIF by franksredhot.gif", shape: "square" },
+      { src: "Gif/Brendon Urie Flirting GIF by Panic! At The Disco.gif", shape: "landscape" },
+      { src: "Gif/5CEAED8E-98AE-4F1F-A685-5A573B847856.jpg", shape: "portrait" },
+      { src: "Gif/A4DB4461-81EB-4C8C-8849-88D8BA8347C2.jpg", shape: "portrait" },
+      { src: "Gif/A763A6F1-F85A-4FDB-B384-69AB45E763B4.jpg", shape: "portrait" },
+      { src: "Gif/F122F041-D159-4C6C-B9EF-129DD226C8B8.jpg", shape: "portrait" },
+    ];
+    let currentMediaIndex = -1;
 
     inviteMusic.volume = inviteMusicVolume;
+
+    function chooseMediaIndex() {
+      if (currentMediaIndex < 0) return Math.floor(Math.random() * mediaItems.length);
+      const offset = 1 + Math.floor(Math.random() * (mediaItems.length - 1));
+      return (currentMediaIndex + offset) % mediaItems.length;
+    }
+
+    function applyMedia(item, index) {
+      gifStage.dataset.shape = item.shape;
+      welcomeGif.src = encodeURI(item.src);
+      currentMediaIndex = index;
+    }
+
+    function shuffleMedia(animate = true) {
+      const nextIndex = chooseMediaIndex();
+      const nextItem = mediaItems[nextIndex];
+
+      if (!animate) {
+        applyMedia(nextItem, nextIndex);
+        return;
+      }
+
+      gifShuffle.disabled = true;
+      const preloader = new Image();
+      preloader.onload = () => {
+        welcomeGif.classList.add("is-changing");
+        window.setTimeout(() => {
+          applyMedia(nextItem, nextIndex);
+          window.requestAnimationFrame(() => {
+            welcomeGif.classList.remove("is-changing");
+            gifShuffle.disabled = false;
+          });
+        }, 140);
+      };
+      preloader.onerror = () => {
+        gifShuffle.disabled = false;
+      };
+      preloader.src = encodeURI(nextItem.src);
+    }
+
+    gifShuffle.addEventListener("click", () => shuffleMedia());
+    shuffleMedia(false);
 
     function updateInviteMusic() {
       const isPlaying = !inviteMusic.paused && !inviteMusic.ended;

@@ -48,7 +48,11 @@
           </div>
         </div>
 
-        <div class="gif-stage" aria-label="An animated character holds out both hands and calls you closer">
+        <div
+          class="gif-stage"
+          id="gif-stage"
+          aria-label="A playful GIF or photo picked just for you"
+        >
           <span class="floating-heart heart-one" aria-hidden="true">♥</span>
           <span class="floating-heart heart-two" aria-hidden="true">♥</span>
           <span class="floating-heart heart-three" aria-hidden="true">♥</span>
@@ -56,11 +60,23 @@
           <span class="gif-spark spark-two" aria-hidden="true">✦</span>
           <img
             class="welcome-gif"
+            id="welcome-gif"
             src="Gif/source.gif"
-            alt="An animated character holding out both hands"
+            alt="A playful memory or animated reaction"
           />
         </div>
       </section>
+
+      <button
+        class="gif-shuffle"
+        id="gif-shuffle"
+        type="button"
+        aria-controls="welcome-gif"
+        aria-label="Shuffle to another GIF or photo"
+      >
+        <span aria-hidden="true">↻</span>
+        shuffle
+      </button>
     </main>
 
     <!--
