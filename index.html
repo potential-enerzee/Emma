@@ -9,7 +9,7 @@
       content="A little animated invitation for Emma."
     />
     <title>Come to me, sweetheart!</title>
-    <link rel="stylesheet" href="styles.css" />
+    <link rel="stylesheet" href="styles.css?v=20260924-1" />
     <link rel="stylesheet" href="adventure.css" />
   </head>
   <body class="kid-mode">
@@ -51,7 +51,7 @@
         <div
           class="gif-stage"
           id="gif-stage"
-          aria-label="A playful GIF or photo picked just for you"
+          aria-label="A playful GIF, photo, or video picked just for you"
         >
           <span class="floating-heart heart-one" aria-hidden="true">♥</span>
           <span class="floating-heart heart-two" aria-hidden="true">♥</span>
@@ -59,11 +59,23 @@
           <span class="gif-spark spark-one" aria-hidden="true">✦</span>
           <span class="gif-spark spark-two" aria-hidden="true">✦</span>
           <img
-            class="welcome-gif"
+            class="welcome-media welcome-gif"
             id="welcome-gif"
             src="Gif/source.gif"
             alt="A playful memory or animated reaction"
           />
+          <video
+            class="welcome-media welcome-video"
+            id="welcome-video"
+            src="The_video/igexport-DYubMIqJ7oG.mp4"
+            aria-label="A playful video memory"
+            playsinline
+            controls
+            preload="auto"
+            hidden
+          >
+            Your browser does not support this video.
+          </video>
         </div>
       </section>
 
@@ -71,8 +83,8 @@
         class="gif-shuffle"
         id="gif-shuffle"
         type="button"
-        aria-controls="welcome-gif"
-        aria-label="Shuffle to another GIF or photo"
+        aria-controls="welcome-gif welcome-video"
+        aria-label="Shuffle to another GIF, photo, or video"
       >
         <span aria-hidden="true">↻</span>
         shuffle
@@ -681,6 +693,6 @@
     <noscript>This little adventure needs JavaScript enabled to work.</noscript>
     <script src="config.js"></script>
     <script src="adventure.js"></script>
-    <script src="script.js"></script>
+    <script src="script.js?v=20260924-1"></script>
   </body>
 </html>

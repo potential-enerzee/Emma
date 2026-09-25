@@ -9,6 +9,7 @@
     const inviteMusicState = document.getElementById("invite-music-state");
     const gifStage = document.getElementById("gif-stage");
     const welcomeGif = document.getElementById("welcome-gif");
+    const welcomeVideo = document.getElementById("welcome-video");
     const gifShuffle = document.getElementById("gif-shuffle");
     const inviteMusicVolume = 0.16;
     const mediaItems = [
@@ -25,29 +26,78 @@
       { src: "Gif/hey GIF.gif", shape: "landscape" },
       { src: "Gif/Franks Hey Hot Stuff GIF by franksredhot.gif", shape: "square" },
       { src: "Gif/Brendon Urie Flirting GIF by Panic! At The Disco.gif", shape: "landscape" },
-      { src: "Gif/5CEAED8E-98AE-4F1F-A685-5A573B847856.jpg", shape: "portrait" },
-      { src: "Gif/A4DB4461-81EB-4C8C-8849-88D8BA8347C2.jpg", shape: "portrait" },
-      { src: "Gif/A763A6F1-F85A-4FDB-B384-69AB45E763B4.jpg", shape: "portrait" },
-      { src: "Gif/F122F041-D159-4C6C-B9EF-129DD226C8B8.jpg", shape: "portrait" },
+      { src: "Gif/photo-waterfall.jpg", shape: "portrait" },
+      { src: "Gif/photo-silly-selfie.jpg", shape: "portrait" },
+      { src: "Gif/photo-hallway.jpg", shape: "portrait" },
+      { src: "Gif/photo-dog-closeup.jpg", shape: "portrait" },
+      { src: "The_video/igexport-DYubMIqJ7oG.mp4", shape: "portrait", type: "video" },
     ];
     let currentMediaIndex = -1;
+    let shuffledMediaIndices = [];
 
     inviteMusic.volume = inviteMusicVolume;
 
-    function chooseMediaIndex() {
-      if (currentMediaIndex < 0) return Math.floor(Math.random() * mediaItems.length);
-      const offset = 1 + Math.floor(Math.random() * (mediaItems.length - 1));
-      return (currentMediaIndex + offset) % mediaItems.length;
+    function chooseMediaIndex(allowVideo = true) {
+      if (!allowVideo) {
+        const imageIndices = mediaItems
+          .map((item, index) => (item.type === "video" ? -1 : index))
+          .filter((index) => index >= 0);
+        return imageIndices[Math.floor(Math.random() * imageIndices.length)];
+      }
+
+      if (shuffledMediaIndices.length === 0) {
+        shuffledMediaIndices = mediaItems.map((_, index) => index);
+        for (let index = shuffledMediaIndices.length - 1; index > 0; index -= 1) {
+          const randomIndex = Math.floor(Math.random() * (index + 1));
+          [shuffledMediaIndices[index], shuffledMediaIndices[randomIndex]] = [
+            shuffledMediaIndices[randomIndex],
+            shuffledMediaIndices[index],
+          ];
+        }
+
+        const nextIndex = shuffledMediaIndices.length - 1;
+        if (shuffledMediaIndices[nextIndex] === currentMediaIndex) {
+          const replacementIndex = shuffledMediaIndices.findIndex(
+            (index) => index !== currentMediaIndex
+          );
+          [shuffledMediaIndices[nextIndex], shuffledMediaIndices[replacementIndex]] = [
+            shuffledMediaIndices[replacementIndex],
+            shuffledMediaIndices[nextIndex],
+          ];
+        }
+      }
+
+      return shuffledMediaIndices.pop();
     }
 
     function applyMedia(item, index) {
+      const isVideo = item.type === "video";
+      const activeMedia = isVideo ? welcomeVideo : welcomeGif;
+
       gifStage.dataset.shape = item.shape;
-      welcomeGif.src = encodeURI(item.src);
+      if (!isVideo) welcomeGif.src = encodeURI(item.src);
+
+      welcomeGif.hidden = isVideo;
+      welcomeVideo.hidden = !isVideo;
+      welcomeGif.setAttribute("aria-hidden", String(isVideo));
+      welcomeVideo.setAttribute("aria-hidden", String(!isVideo));
+
+      if (isVideo) {
+        welcomeVideo.currentTime = 0;
+        if (welcomeVideo.paused) welcomeVideo.play().catch(() => {});
+      } else if (!welcomeVideo.paused) {
+        welcomeVideo.pause();
+        welcomeVideo.currentTime = 0;
+      }
+
+      window.requestAnimationFrame(() => activeMedia.classList.remove("is-changing"));
       currentMediaIndex = index;
     }
 
     function shuffleMedia(animate = true) {
-      const nextIndex = chooseMediaIndex();
+      // Keep the video for an intentional shuffle so its playback is started by
+      // the same user gesture that selected it.
+      const nextIndex = chooseMediaIndex(animate);
       const nextItem = mediaItems[nextIndex];
 
       if (!animate) {
@@ -56,17 +106,28 @@
       }
 
       gifShuffle.disabled = true;
-      const preloader = new Image();
-      preloader.onload = () => {
-        welcomeGif.classList.add("is-changing");
+      const currentMedia = welcomeVideo.hidden ? welcomeGif : welcomeVideo;
+      const revealMedia = () => {
+        const nextMedia = nextItem.type === "video" ? welcomeVideo : welcomeGif;
+        currentMedia.classList.add("is-changing");
+        nextMedia.classList.add("is-changing");
         window.setTimeout(() => {
           applyMedia(nextItem, nextIndex);
-          window.requestAnimationFrame(() => {
-            welcomeGif.classList.remove("is-changing");
-            gifShuffle.disabled = false;
-          });
+          gifShuffle.disabled = false;
         }, 140);
       };
+
+      if (nextItem.type === "video") {
+        // Calling play directly from the click keeps audible playback compatible
+        // with browsers that require a user gesture.
+        welcomeVideo.currentTime = 0;
+        welcomeVideo.play().catch(() => {});
+        revealMedia();
+        return;
+      }
+
+      const preloader = new Image();
+      preloader.onload = revealMedia;
       preloader.onerror = () => {
         gifShuffle.disabled = false;
       };
@@ -99,6 +160,12 @@
     inviteMusic.addEventListener("playing", updateInviteMusic);
     inviteMusic.addEventListener("pause", updateInviteMusic);
     inviteMusic.addEventListener("ended", updateInviteMusic);
+    ["play", "pause", "ended", "volumechange"].forEach((eventName) => {
+      welcomeVideo.addEventListener(eventName, () => {
+        const videoIsAudible = !welcomeVideo.paused && !welcomeVideo.ended && !welcomeVideo.muted;
+        inviteMusic.volume = videoIsAudible ? 0.035 : inviteMusicVolume;
+      });
+    });
     updateInviteMusic();
     return;
   }

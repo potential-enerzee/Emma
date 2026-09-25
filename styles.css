@@ -3525,7 +3525,7 @@ noscript {
   animation: inviteGifIn 1s var(--ease) 0.15s both, inviteGifFloat 3.7s ease-in-out 1.3s infinite;
 }
 
-.welcome-gif {
+.welcome-media {
   display: block;
   width: 100%;
   height: auto;
@@ -3533,7 +3533,17 @@ noscript {
   transition: opacity 0.14s ease, transform 0.14s ease;
 }
 
-.welcome-gif.is-changing {
+.welcome-media[hidden] {
+  display: none;
+}
+
+.welcome-video {
+  aspect-ratio: 9 / 16;
+  background: #171210;
+  object-fit: cover;
+}
+
+.welcome-media.is-changing {
   opacity: 0;
   transform: scale(0.985);
 }
